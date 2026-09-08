@@ -1,111 +1,104 @@
 # Handoff
 
-Дата: 2026-09-08. Ведёт PM-сессия.
+Последнее обновление: 2026-09-08, конец сессии. Ведёт PM-сессия.
+**Продолжение — 2026-09-09.**
 
-## Над чем работаем
+---
 
-Сервис генерации коротких вертикальных роликов (1080×1920) на Remotion.
-Ниша уточнена: **обучающие ролики по программированию для Instagram, серийные.**
-Этап: **M1** — привести рендер-слой и дизайн-систему к дизайн-манифесту.
-Полная структура — `docs/`. Роли сессий — `docs/roles/`.
+## START HERE (следующая сессия)
 
-## Дизайн-манифест — ПРИНЯТ (2026-09-08)
+1. **Владелец смотрит `Video05` в Remotion Studio** (`cd project1 && npm run dev` → `Video05`)
+   и даёт разбор. На что смотреть — см. «Ждём от владельца» ниже.
+2. По разбору PM собирает список правок и запускает **G2** (автоподгонка кегля заголовка)
+   и **G4** (переходы между сценами) + правки логотипов сцены 8.
+3. Затем **чистка старого** (см. ниже) — и M1 закрыт.
+
+Проверочные композиции: `Video05` (эталон ролика), `IconDemo`, `MotionDemo`,
+`TypographyDemo`, `SequentialRevealDemo`. НЕ `MyFirstVideo`/`Video03` (старьё).
+
+---
+
+## Проект
+
+Сервис генерации вертикальных роликов (1080×1920) на Remotion. Ниша: **обучающие
+ролики по программированию для Instagram, серийные.** Этап **M1** — привести
+рендер-слой к дизайн-манифесту. Структура — `docs/`. Роли сессий — `docs/roles/`.
+
+Две сессии: **PM** (Claude, папка `vibe-starter`) даёт ТЗ и ревьюит; **DEV**
+(приложение Claude, папка `project1`, session id `local_0aaad877-...`) пишет код,
+не коммитит. Владелец — мост, **коммитит вручную** (в этой сессии коммитил PM по
+просьбе владельца).
+
+## Дизайн-манифест — ПРИНЯТ
 
 Канон — `project1/src/common/design-system/about.md`. Кратко:
-- Строго чёрно-белый, два режима кадра: `paper` (белый/чёрный fg), `ink` (чёрный/белый fg).
-  Полутонов и акцента нет (`#CCFF00`, `series.*`, `danger` — удаляются).
-- Один шрифт — **Montserrat**, веса Thin/Light/Regular, максимум Regular. SF Pro убирается.
-- В кадре только контент: типографика, монохромные логотипы, монохромные иконки, геометрия.
-  Ни видео, ни фото, ни людей, ни кода на экране, ни цвета.
-- Движение — профессиональный motion-design средствами Remotion.
-- Открытые вопросы (референсы, настроение, правило смены режимов, плотность, фирменная
-  деталь, язык, нумерация, субтитры, набор иконок) — §8 манифеста, ждут владельца.
+- **Строго ч/б.** `color.black`/`white` + один `color.gray` `#8A8A8A` (только `small`/
+  приглушённый `body`). Два режима кадра: `paper` (белый/чёрный), `ink` (чёрный/белый).
+- **Один шрифт — Montserrat**, веса Light/Regular, максимум Regular. Роли `text.h1`
+  (104) / `h2` (60) / `body` (48) / `small` (22), объекты стилей БЕЗ цвета.
+- **Логотипы брендов — в ОРИГИНАЛЬНОМ цвете** (единственный цвет в кадре).
+  Генерик-иконки (терминал, стрелка…) — моно, `color.fg`.
+- **Плотность:** 3–5, целевое 4–6 элементов на сцену, распределять по всей высоте.
+- **В кадре только контент:** типографика, цветные логотипы, моно-иконки, геометрия.
+  Ни видео/фото/людей/кода на экране.
+- **Движение** — motion-design средствами Remotion.
 
-## Сделано в этой сессии
+## Коммиты этой сессии (2026-09-08)
 
-- Структура проекта `docs/01..09` + роли `docs/roles/` (`1d98da0`, `4c41947`).
-- Дизайн-манифест B&W записан (`8af3e4f`); канон — `project1/src/common/design-system/about.md`.
-- **INFRA-1 закрыта** (`e707943`): `project1/.git` был утрачен → `project1/` влит в
-  корневой репозиторий как обычная папка. Монорепо. `.gitignore` обновлён.
-- **DEL-1** (в `e707943`): удалён shadcn UI-kit, `IntroPanel`, `Video04`, `index.css`,
-  Tailwind-обвязка + зависимости; `palette.ts` → placeholder; 8 пресетов.
-- **TYPO-1** (в `e707943`): аддитивно `text.h1/h2/body/small` (без цвета) +
-  `color.black/white/gray`; демо `TypographyDemo`. `GridScene` — фикс 2 строки (фолбэк).
-  ⚠️ Владельцу: `body` 26→32 укрупняет `SlideInList`/`DocumentList` — визуальная проверка.
+| commit | что |
+|---|---|
+| `1d98da0`, `4c41947` | структура `docs/` + роли сессий |
+| `8af3e4f` | дизайн-манифест B&W записан |
+| `e707943` | **INFRA-1** (монорепо: `project1/.git` утрачен → влит) + **DEL-1** (снос shadcn UI-kit / тем / Tailwind) + **TYPO-1** (`text.h1/h2/body/small`, `color.black/white/gray`, `TypographyDemo`) |
+| `e06e6d8` | **PKG-1** — `@remotion/{transitions,shapes,paths,motion-blur,layout-utils,animation-utils}@4.0.490` |
+| `8fffd3b` | **TPL-1** (`src/templates/`, `SequentialReveal`, `SceneFrame.resolveScene`) + **SCRIPT-1** (`video-05`). Направление: **вариант 3 — сцены-шаблоны** |
+| `4c2b157` | **SCRIPT-2 + TYPO-2** — `body`→48, сцены 2–3 сек, `enter` на каждом item |
+| `5f340bb` | **PRIM-1** — `src/primitives/` → папка, единая конвенция entrance-хуков, `SPRING`/`DURATION`, новые хуки, `deprecated.ts`, `MotionDemo` |
+| `076c502` | **ICON-1** (`sync-icons.mjs`, devDeps `devicon`+`lucide-static`, реестры `src/logos/`+`src/icons/`, `<Logo>`/`<Icon>`, `IconDemo`) + **G1** (`grid.ts` 9 равных рядов, `SequentialReveal` распределяет <7 элементов) |
+| `cb15374` | **SCRIPT-3** — `video-05` плотный: 9 сцен × 6 элементов, 940 кадров (~31 сек) |
 
-## Сделано, закоммичено
-
-- `e06e6d8` — PKG-1: `@remotion/{transitions,shapes,paths,motion-blur,layout-utils,animation-utils}@4.0.490`
-- `8fffd3b` — TPL-1 (`src/templates/` + `TEMPLATE_REGISTRY` + `SequentialReveal` + `useReveal`
-  + `SceneFrame.resolveScene`) и SCRIPT-1 (`video-05.ts` «Вайб-кодинг», 9 сцен, 1545 кадров, `Video05`).
-  Направление: **вариант 3 — сцены-шаблоны**.
-
-- `4c2b157` — SCRIPT-2 + TYPO-2: `body` 32→48; video-05 сцены ужаты до 75/90
-  кадров (2–3 сек), TOTAL_FRAMES 735 (~24.5 сек); каждому item задан `enter`
-  (все 9 типов по ролику). Визуалка: Video03 sub-текст теперь 48px; сцены 5/6/9
-  рыхлые до G1; сцена 7 zoomIn на 104px может обрезаться.
-- `5f340bb` — PRIM-1: `src/primitives/` → папка с единой конвенцией. `enter.ts`
-  (9 entrance-хуков `useX(delay,opts)=>CSSProperties` + `useEntrance` диспетчер),
-  `emphasis.ts` (usePulse/useSpin/useFloat/useBlink), `text.ts`, `helpers.ts`
-  (`useProgress`, `staggerDelays`), `deprecated.ts` (старое поколение на 8 пресетах).
-  `SPRING`/`DURATION` в `motion.ts`. `SequentialReveal.items[].enter?: EntranceName`.
-  Демо `MotionDemo`. Визуалка: CounterDuo счётчик тикает на пару кадров дольше.
-
-## В работе (DEV) — очередь
-
-1. **ICON-1** — скрипт `sync-icons.mjs` (devDeps: Devicon + gilbarbara/logos + lucide-static),
-   реестры `src/logos/` (цветные, как есть) + `src/icons/` (Lucide, моно), `<Logo>`/`<Icon>`,
-   подключение к `SequentialReveal`, демо `IconDemo`, video-05 сцена 8 → реальные логотипы.
-2. **G1** — `grid.ts` ряды равные (убрать 3fr на `main`); `SequentialReveal` распределяет
-   <7 элементов по всей высоте.
-3. **SCRIPT-3** — `video-05` переписан плотно: 9 сцен × 6 элементов, TOTAL_FRAMES 940 (~31 сек).
-   Текст утверждён владельцем.
-
-Дальше (ждут): **G2** (автоподгонка кегля заголовка, `@remotion/layout-utils`),
-**G4** (переходы между сценами, `@remotion/transitions`).
-
-## Ждут аппрува владельца (пробелы из video-05)
-
-- **G1** — `layout: "stack"` у `SequentialReveal`: плотный вертикальный поток в одной зоне
-  (сейчас 1 элемент = 1 зона, дыра после заголовка в сценах-списках 5, 6).
-- **G2** — автоподгонка кегля `h1`/`h2` под ширину (через `@remotion/layout-utils`), сцена 7.
-- **G3** — `{ kind: "row", items: [...] }` / шаблон `LogoRow`: горизонтальный ряд логотипов, сцена 8.
-- **G4** — переходы между сценами: `transition?` в записи манифеста + `<TransitionSeries>` в `SceneFrame`.
-
-## Ждёт: визуальная приёмка `video-05` владельцем (Studio → `Video05`).
+Рабочее дерево чистое (кроме этого файла).
 
 ## Состояние project1/
 
-- Пресеты (8): `BlurReveal`, `CounterDuo`, `DocumentList`, `GridScene`, `HeroBadge`,
-  `HookScene`, `SlideInList`, `TextTypewriter`. Держат хардкод старых цветов — под манифест не приведены.
-- Композиции: `MyFirstVideo` (video-02, 450), `Video03` (300), `GridSystemDemo` (150).
-  `video-01.ts` существует, ни к одной композиции не привязан.
-- `src/common/design-system/`: `fonts.ts` (Montserrat + SF Pro — SF Pro убрать),
-  `palette.ts` (placeholder), `scale.ts`, `tokens.ts`, `motion.ts`, `grid.ts`.
-- `src/primitives/index.ts`: `useFadeIn/useBlurReveal/useScaleIn/useSlideX/useSpin/useTypewriter`.
-- Remotion 4.0.490; пакеты: `remotion`, `@remotion/cli`, `@remotion/google-fonts`.
-- Шрифты SF Pro `.woff2` в `public/fonts/` отсутствуют (станет неактуально после
-  перехода на «только Montserrat»).
+- **Рендер-слой на манифесте:** токены `design-system/` (h1/h2/body/small, black/white/gray),
+  `grid.ts` (9 равных рядов), `primitives/` (папка: enter/emphasis/text/helpers/deprecated),
+  `templates/` (`SequentialReveal`), `logos/` + `icons/` (реестры + компоненты).
+- **Эталонный ролик:** `video-05.ts` → композиция `Video05` (9 сцен, 940 кадров).
+- **Демо:** `TypographyDemo`, `MotionDemo`, `IconDemo`, `SequentialRevealDemo`, `GridSystemDemo`.
+- **Старое (под снос, НЕ трогать/не переписывать — `src/videos/README.md`):**
+  `video-01/02/03.ts`, композиции `MyFirstVideo`/`Video03`, 8 пресетов
+  (`BlurReveal`, `CounterDuo`, `DocumentList`, `GridScene`, `HeroBadge`, `HookScene`,
+  `SlideInList`, `TextTypewriter`), старые токены (`text.display/…`, `color.text/…/series`,
+  `tint`, `elevation`), `deprecated.ts` в примитивах, SF Pro в `fonts.ts`.
+- Remotion 4.0.490.
 
-## Next steps
+## Ждём от владельца (визуальная приёмка `Video05`)
 
-1. Ревью PKG-1 / TPL-1 / SCRIPT-1 по мере готовности; владелец коммитит.
-2. **Чистка старого** (после SCRIPT-1, одной пачкой):
-   - удалить `video-01.ts` / `video-02.ts` / `video-03.ts` + композиции `MyFirstVideo`,
-     `Video03` (старая тёмная тема, не по манифесту — см. `project1/src/videos/README.md`);
-   - удалить/мигрировать 8 старых пресетов;
-   - убрать старые токены (`text.display/heading/subheading/title/caption`,
-     `color.text/textMuted/textFaint/accent/danger/series`, `tint`, `elevation`).
-   Эталон после этого — `video-05` + демо-композиции.
-3. **`fonts.ts` → только Montserrat** (убрать SF Pro Display).
-4. Ответы владельца на открытые вопросы стиля (`about.md` §8): референсы, настроение,
-   правило смены режимов, плотность, фирменная деталь, язык, нумерация, субтитры, набор иконок.
-5. Логотип-ассеты (`public/logos/`, монохром SVG): Claude, Cursor, Copilot/GitHub, Apple.
-6. Пересобрать backlog M1 под манифест и вариант 3 (эпик DS → шаблоны + атомы + motion).
+1. Плотность — заполнено нормально или перебор?
+2. Длинные `body` (48px) в 2 строки при рядах ~213px — тесно? (сцены 3, 6 особенно)
+3. Сцена 7 — заголовок «Шаг — вопрос — коммит» переносится? → G2
+4. Сцена 8 — 3 логотипа вертикально, Claude широкий (вордмарка) vs компактные — нужен
+   горизонтальный ряд + Claude-значок вместо вордмарки
+5. Анимации `enter` — какие оставить, какие убрать (собрать «одобренный» набор)
+6. `IconDemo` — цветные логотипы на ч/б, читаемость моно-иконок
+
+## Задачи в очереди (после разбора)
+
+- **G2** — автоподгонка кегля `h1`/`h2` под ширину контента (`@remotion/layout-utils` `fitText`).
+- **G4** — переходы между сценами: `transition?` в записи манифеста + `<TransitionSeries>` в `SceneFrame`.
+- **LOGO-ROW** — горизонтальный ряд логотипов (тип элемента `row` или отдельный шаблон); Claude-значок.
+- **CLEANUP-1** — снести старое (video-01/02/03 + `MyFirstVideo`/`Video03` + 8 пресетов +
+  старые токены + `deprecated.ts` + SF Pro из `fonts.ts`). После этого M1 закрыт.
+- Открытые вопросы стиля — `about.md` §8 (референсы, настроение, правило смены режимов,
+  фирменная деталь, язык текста, нумерация, субтитры).
+- Расширить набор логотипов/иконок в `src/icons/wanted.json` по мере роликов
+  (`npm run sync-icons`).
 
 ## Правила
 
 - `inputs/` не менять. Разборы — в `outputs/`. Данные не выдумывать.
 - Новые пакеты — только с аппрувом владельца.
-- Цвет/размер/шрифт — только через токены, не строками в пресетах. Два цвета, точка.
-- Коммитит владелец вручную; PM обновляет этот файл после.
+- Цвет/размер/шрифт — только через токены. Два цвета (+ серый для служебного). Цветные — только логотипы.
+- DEV не коммитит. Коммит — владелец (или PM по прямой просьбе).
+- Бэклог `docs/08` устарел после дизайн-разворота — PM ведёт DEV прямыми ТЗ. Переписать при случае.
