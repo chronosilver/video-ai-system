@@ -1,0 +1,37 @@
+{
+  "logos": [
+    "python",
+    "javascript",
+    "typescript",
+    "react",
+    "nodejs",
+    "docker",
+    "git",
+    "github",
+    "vscode",
+    "claude",
+    "cursor",
+    "openai",
+    "githubcopilot"
+  ],
+  "icons": [
+    "terminal",
+    "folder",
+    "file-code",
+    "git-branch",
+    "git-commit-horizontal",
+    "git-pull-request",
+    "braces",
+    "code",
+    "bug",
+    "check",
+    "x",
+    "arrow-right",
+    "chevron-right",
+    "mouse-pointer-2",
+    "keyboard",
+    "sparkles",
+    "list",
+    "circle-dot"
+  ]
+}

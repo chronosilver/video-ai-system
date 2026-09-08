@@ -100,7 +100,7 @@ export const VIDEO_05: SceneManifestEntry[] = [
       items: [
         { kind: "logo", name: "claude", enter: "slideRight" },
         { kind: "logo", name: "cursor", enter: "rise" },
-        { kind: "logo", name: "copilot", enter: "slideLeft" },
+        { kind: "logo", name: "githubcopilot", enter: "slideLeft" },
         { kind: "text", role: "body", value: "инструмент вторичен. ведёшь ты.", enter: "fade" },
       ],
     },

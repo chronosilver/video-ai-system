@@ -51,9 +51,18 @@
   `SPRING`/`DURATION` в `motion.ts`. `SequentialReveal.items[].enter?: EntranceName`.
   Демо `MotionDemo`. Визуалка: CounterDuo счётчик тикает на пару кадров дольше.
 
-## В работе (DEV)
+## В работе (DEV) — очередь
 
-Очередь пуста — ждём аппрув G1–G4 и/или темы нового ролика.
+1. **ICON-1** — скрипт `sync-icons.mjs` (devDeps: Devicon + gilbarbara/logos + lucide-static),
+   реестры `src/logos/` (цветные, как есть) + `src/icons/` (Lucide, моно), `<Logo>`/`<Icon>`,
+   подключение к `SequentialReveal`, демо `IconDemo`, video-05 сцена 8 → реальные логотипы.
+2. **G1** — `grid.ts` ряды равные (убрать 3fr на `main`); `SequentialReveal` распределяет
+   <7 элементов по всей высоте.
+3. **SCRIPT-3** — `video-05` переписан плотно: 9 сцен × 6 элементов, TOTAL_FRAMES 940 (~31 сек).
+   Текст утверждён владельцем.
+
+Дальше (ждут): **G2** (автоподгонка кегля заголовка, `@remotion/layout-utils`),
+**G4** (переходы между сценами, `@remotion/transitions`).
 
 ## Ждут аппрува владельца (пробелы из video-05)
 

@@ -23,7 +23,9 @@
     "@remotion/eslint-config-flat": "4.0.490",
     "@types/react": "19.2.7",
     "@types/web": "0.0.166",
+    "devicon": "2.17.0",
     "eslint": "9.19.0",
+    "lucide-static": "1.42.0",
     "prettier": "3.8.1",
     "typescript": "5.9.3"
   },
@@ -31,6 +33,7 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "sync-icons": "node scripts/sync-icons.mjs"
   }
 }
