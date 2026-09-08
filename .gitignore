@@ -1,0 +1,9 @@
+# Корневой репозиторий = продуктовый слой (docs/, brief, handoff, outputs).
+# Рендер-слой project1/ — отдельный git-репозиторий (project1/.git), НЕ вкладывается
+# сюда как gitlink. Коммиты кода делаются внутри project1/.
+# Решение о финальной структуре (монорепо / submodule) — задача INFRA-1 в бэклоге.
+project1/
+
+.DS_Store
+.env
+node_modules/
