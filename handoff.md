@@ -40,12 +40,16 @@
   + `SceneFrame.resolveScene`) и SCRIPT-1 (`video-05.ts` «Вайб-кодинг», 9 сцен, 1545 кадров, `Video05`).
   Направление: **вариант 3 — сцены-шаблоны**.
 
+- `5f340bb` — PRIM-1: `src/primitives/` → папка с единой конвенцией. `enter.ts`
+  (9 entrance-хуков `useX(delay,opts)=>CSSProperties` + `useEntrance` диспетчер),
+  `emphasis.ts` (usePulse/useSpin/useFloat/useBlink), `text.ts`, `helpers.ts`
+  (`useProgress`, `staggerDelays`), `deprecated.ts` (старое поколение на 8 пресетах).
+  `SPRING`/`DURATION` в `motion.ts`. `SequentialReveal.items[].enter?: EntranceName`.
+  Демо `MotionDemo`. Визуалка: CounterDuo счётчик тикает на пару кадров дольше.
+
 ## В работе (DEV)
 
-- **PRIM-1** — унификация + расширение `src/primitives/` (единая сигнатура entrance-хуков
-  `useX(delay, opts) => CSSProperties`; SPRING/DURATION константы; новые: useDrop, useSlideLeft/Right,
-  useBlurIn, useMaskWipe, useZoomIn, useFloat, useBlink; `SequentialReveal.items[].enter?`;
-  старые хуки → `@deprecated`; демо `MotionDemo`).
+Очередь пуста — ждём аппрув G1–G4 и/или темы нового ролика.
 
 ## Ждут аппрува владельца (пробелы из video-05)
 
