@@ -40,6 +40,10 @@
   + `SceneFrame.resolveScene`) и SCRIPT-1 (`video-05.ts` «Вайб-кодинг», 9 сцен, 1545 кадров, `Video05`).
   Направление: **вариант 3 — сцены-шаблоны**.
 
+- `4c2b157` — SCRIPT-2 + TYPO-2: `body` 32→48; video-05 сцены ужаты до 75/90
+  кадров (2–3 сек), TOTAL_FRAMES 735 (~24.5 сек); каждому item задан `enter`
+  (все 9 типов по ролику). Визуалка: Video03 sub-текст теперь 48px; сцены 5/6/9
+  рыхлые до G1; сцена 7 zoomIn на 104px может обрезаться.
 - `5f340bb` — PRIM-1: `src/primitives/` → папка с единой конвенцией. `enter.ts`
   (9 entrance-хуков `useX(delay,opts)=>CSSProperties` + `useEntrance` диспетчер),
   `emphasis.ts` (usePulse/useSpin/useFloat/useBlink), `text.ts`, `helpers.ts`
