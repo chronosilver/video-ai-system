@@ -60,9 +60,13 @@
 ## Next steps
 
 1. Ревью PKG-1 / TPL-1 / SCRIPT-1 по мере готовности; владелец коммитит.
-2. **Чистка старых токенов** (после SCRIPT-1): убрать `text.display/heading/subheading/title/caption`,
-   `color.text/textMuted/textFaint/accent/danger/series`, `tint`, `elevation`;
-   мигрировать 8 пресетов на новые токены + режим `paper/ink`. Прогнать `video-01..03` визуально.
+2. **Чистка старого** (после SCRIPT-1, одной пачкой):
+   - удалить `video-01.ts` / `video-02.ts` / `video-03.ts` + композиции `MyFirstVideo`,
+     `Video03` (старая тёмная тема, не по манифесту — см. `project1/src/videos/README.md`);
+   - удалить/мигрировать 8 старых пресетов;
+   - убрать старые токены (`text.display/heading/subheading/title/caption`,
+     `color.text/textMuted/textFaint/accent/danger/series`, `tint`, `elevation`).
+   Эталон после этого — `video-05` + демо-композиции.
 3. **`fonts.ts` → только Montserrat** (убрать SF Pro Display).
 4. Ответы владельца на открытые вопросы стиля (`about.md` §8): референсы, настроение,
    правило смены режимов, плотность, фирменная деталь, язык, нумерация, субтитры, набор иконок.

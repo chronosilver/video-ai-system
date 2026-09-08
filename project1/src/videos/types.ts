@@ -33,8 +33,10 @@
  */
 
 import type { REGISTRY } from "../presets/registry";
+import type { TEMPLATE_REGISTRY } from "../templates/registry";
 
 type RegistryKey = keyof typeof REGISTRY;
+type TemplateKey = keyof typeof TEMPLATE_REGISTRY;
 
 type SceneManifestEntryFor<K extends RegistryKey> = {
   preset:   K;
@@ -42,7 +44,17 @@ type SceneManifestEntryFor<K extends RegistryKey> = {
   data:     React.ComponentPropsWithoutRef<typeof REGISTRY[K]>;
 };
 
-/** Полный дискриминантный union по всем зарегистрированным пресетам */
-export type SceneManifestEntry = {
-  [K in RegistryKey]: SceneManifestEntryFor<K>;
-}[RegistryKey];
+type SceneManifestEntryForTemplate<K extends TemplateKey> = {
+  preset:   K;
+  duration: number;
+  data:     React.ComponentPropsWithoutRef<typeof TEMPLATE_REGISTRY[K]>;
+};
+
+/**
+ * Полный дискриминантный union по всем именам сцен: сначала сцены-шаблоны
+ * (`TEMPLATE_REGISTRY`), затем пресеты (`REGISTRY`). При совпадении имени
+ * SceneFrame отдаёт приоритет шаблону.
+ */
+export type SceneManifestEntry =
+  | { [K in TemplateKey]: SceneManifestEntryForTemplate<K> }[TemplateKey]
+  | { [K in RegistryKey]: SceneManifestEntryFor<K> }[RegistryKey];

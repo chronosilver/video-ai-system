@@ -96,6 +96,32 @@ export const useSlideX = (
 };
 
 // ---------------------------------------------------------------------------
+// Reveal
+// ---------------------------------------------------------------------------
+
+/**
+ * Появление элемента шаблонных сцен: быстрый точный вход без раскачки
+ * (`damping` 200), ~14 кадров. Возвращает { opacity 0→1, translateY 28→0 }.
+ * Задержку задаёт вызывающий (обычно `index * stagger`).
+ */
+export const useReveal = (
+  delay = 0
+): { opacity: number; translateY: number } => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const progress = spring({
+    frame: frame - delay,
+    fps,
+    config: { damping: 200, mass: 0.5 },
+    durationInFrames: 14,
+  });
+  return {
+    opacity: progress,
+    translateY: interpolate(progress, [0, 1], [28, 0]),
+  };
+};
+
+// ---------------------------------------------------------------------------
 // Counter
 // ---------------------------------------------------------------------------
 
