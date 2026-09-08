@@ -4,7 +4,7 @@
  */
 
 import { AbsoluteFill } from "remotion";
-import { useCountUp, useFadeIn, useScaleIn } from "../primitives";
+import { useCountUp, useFadeIn, useScaleInValue } from "../primitives";
 import { text, color, fontWeight } from "../common/design-system";
 
 export interface CounterDuoProps {
@@ -16,7 +16,7 @@ export interface CounterDuoProps {
 export const CounterDuo = ({ left, right, separator = ">" }: CounterDuoProps) => {
   const leftCount  = useCountUp(left.value,  5, 35);
   const rightCount = useCountUp(right.value, 10, 40);
-  const scale      = useScaleIn(0, { damping: 15, mass: 0.5 });
+  const scale      = useScaleInValue(0, { damping: 15, mass: 0.5 });
   const opacity    = useFadeIn(0, 20);
 
   return (

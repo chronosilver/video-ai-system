@@ -1,7 +1,7 @@
 // CardStack-эффект: падающие карточки, одна выделяется анимированной рамкой.
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { text, color, space, fontWeight, lerp } from "../common";
-import { useScaleIn } from "../primitives";
+import { useScaleInValue } from "../primitives";
 
 export interface DocumentListProps {
   title:    string;
@@ -14,7 +14,7 @@ const ROTATIONS = [-6, 8, -3, 5];
 const OFFSETS   = [{ x: -30, y: -150 }, { x: 40, y: -50 }, { x: -20, y: 50 }, { x: 15, y: 130 }];
 
 const NoiseCard = ({ text: label, rot, x, y, delay }: { text: string; rot: number; x: number; y: number; delay: number }) => {
-  const scale = useScaleIn(delay, { damping: 15, mass: 0.5 });
+  const scale = useScaleInValue(delay, { damping: 15, mass: 0.5 });
   return (
     <div style={{ position: "absolute", left: "50%", top: "50%", width: 320, height: 100, marginLeft: -160, marginTop: -50 + y, backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, display: "flex", alignItems: "center", padding: "0 20px", color: color.textFaint, fontSize: text.caption.fontSize, fontFamily: text.body.fontFamily, transform: `scale(${scale}) rotate(${rot}deg) translate(${x}px)`, transformOrigin: "center" }}>
       📄 {label}
@@ -34,7 +34,7 @@ const TargetCard = ({ text: label, strokeProgress, entrance }: { text: string; s
 
 export const DocumentList = ({ title, subtitle, noise, target }: DocumentListProps) => {
   const frame          = useCurrentFrame();
-  const finalEntrance  = useScaleIn(45, { damping: 12, mass: 0.8 });
+  const finalEntrance  = useScaleInValue(45, { damping: 12, mass: 0.8 });
   const strokeProgress = lerp(frame, [55, 80], [2000, 0]);
 
   const dummyDocs = noise.map((label, i) => ({

@@ -4,7 +4,7 @@
  * Принимает список элементов (`items`) и раскладывает их по контентным зонам
  * grid сверху вниз (`CONTENT_ZONE_ORDER`): один элемент = одна зона, через
  * `GridZone` (не координатами). Каждый элемент въезжает каскадом
- * (`useReveal`, задержка = index * stagger).
+ * (entrance-хук по `item.enter`, дефолт `"rise"`; задержка = index * stagger).
  *
  * Режим кадра (`mode`) задаёт фон и дефолтный цвет по дизайн-манифесту
  * (about.md §2–§3): `paper` — чёрное на белом, `ink` — белое на чёрном.
@@ -15,14 +15,18 @@
 
 import { GridLayout, GridZone } from "../components/Grid";
 import { text, color, CONTENT_ZONE_ORDER, type ContentZoneName } from "../common";
-import { useReveal, useStagger } from "../primitives";
+import { useEntrance, staggerDelays, type EntranceName } from "../primitives";
 
 export type RevealTextRole = "h1" | "h2" | "body" | "small";
 
-export type RevealItem =
-  | { kind: "text"; role: RevealTextRole; value: string; tone?: "default" | "muted" }
-  | { kind: "logo"; name: string }
-  | { kind: "icon"; name: string };
+type RevealBase = { enter?: EntranceName };
+
+export type RevealItem = RevealBase &
+  (
+    | { kind: "text"; role: RevealTextRole; value: string; tone?: "default" | "muted" }
+    | { kind: "logo"; name: string }
+    | { kind: "icon"; name: string }
+  );
 
 export interface SequentialRevealProps {
   /** Режим кадра: `paper` (тёмное на светлом) или `ink` (светлое на тёмном) */
@@ -50,7 +54,7 @@ const RevealItemView = ({
   fg: string;
   delay: number;
 }) => {
-  const { opacity, translateY } = useReveal(delay);
+  const enterStyle = useEntrance(item.enter ?? "rise", delay);
 
   let style: React.CSSProperties;
   let content: string;
@@ -72,8 +76,7 @@ const RevealItemView = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        opacity,
-        transform: `translateY(${translateY}px)`,
+        ...enterStyle,
       }}
     >
       <p style={style}>{content}</p>
@@ -84,7 +87,7 @@ const RevealItemView = ({
 export const SequentialReveal = ({ mode = "paper", items, stagger = 10 }: SequentialRevealProps) => {
   const bg = mode === "paper" ? color.white : color.black;
   const fg = mode === "paper" ? color.black : color.white;
-  const delays = useStagger(items.length, stagger);
+  const delays = staggerDelays(items.length, stagger);
 
   return (
     <GridLayout style={{ backgroundColor: bg }}>

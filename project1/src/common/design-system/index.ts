@@ -6,7 +6,7 @@
  *     palette.ts  — сырая палитра (ВРЕМЕННЫЙ placeholder) ├─ примитивы, напрямую не трогать
  *     scale.ts    — числовые шкалы                     ┘
  *     tokens.ts   — СЕМАНТИКА: text / color / space / radius / stroke / elevation / video
- *     motion.ts   — EASE-кривые
+ *     motion.ts   — язык движения: EASE / SPRING / DURATION
  *
  * Пресеты и манифесты импортируют только семантику (`text`, `color`, ...) —
  * через этот индекс или через `../common`.
@@ -29,7 +29,7 @@ export {
 export { fontDisplay, fontBody, fontMono } from "./fonts";
 
 // Motion
-export { EASE } from "./motion";
+export { EASE, SPRING, DURATION, type SpringName } from "./motion";
 
 // Примитивы (на случай нестандартных сцен)
 export { fontSize, fontWeight, lineHeight } from "./scale";

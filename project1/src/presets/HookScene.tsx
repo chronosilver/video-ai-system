@@ -1,6 +1,6 @@
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { text, color, space, fontWeight, fontMono, lerp } from "../common";
-import { useFadeIn, useScaleIn, usePulse } from "../primitives";
+import { useFadeIn, useScaleInValue, usePulse } from "../primitives";
 
 export interface HookSceneProps {
   brand:      string;
@@ -17,10 +17,10 @@ export const HookScene = ({ brand, category, titleLine1, titleLine2, pill, accen
 
   const headerY       = lerp(frame, [0, 15], [-50, 0]);
   const headerOpacity = useFadeIn(0, 15);
-  const titleScale    = useScaleIn(0, { damping: 14, mass: 0.6 });
+  const titleScale    = useScaleInValue(0, { damping: 14, mass: 0.6 });
   const titleOpacity  = useFadeIn(0, 20);
-  const pillScale     = useScaleIn(20, { damping: 10, mass: 0.5 });
-  const wordScale     = useScaleIn(30, { damping: 8, mass: 0.4 });
+  const pillScale     = useScaleInValue(20, { damping: 10, mass: 0.5 });
+  const wordScale     = useScaleInValue(30, { damping: 8, mass: 0.4 });
   const wordOpacity   = useFadeIn(30, 15);
   const pulseScale    = usePulse(0.15, 0.05);
 

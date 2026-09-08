@@ -1,5 +1,6 @@
 import { MyComposition } from "./compositions/Composition";
 import { GridSystemDemo } from "./compositions/GridDemo";
+import { MotionDemo } from "./compositions/MotionDemo";
 import { SequentialRevealDemo } from "./compositions/SequentialRevealDemo";
 import { TypographyDemo } from "./compositions/TypographyDemo";
 import { Video03 } from "./compositions/Video03";
@@ -15,6 +16,7 @@ export const RemotionRoot: React.FC = () => {
       <GridSystemDemo />
       <TypographyDemo />
       <SequentialRevealDemo />
+      <MotionDemo />
     </>
   );
 };
