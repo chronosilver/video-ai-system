@@ -33,16 +33,29 @@
   `color.black/white/gray`; демо `TypographyDemo`. `GridScene` — фикс 2 строки (фолбэк).
   ⚠️ Владельцу: `body` 26→32 укрупняет `SlideInList`/`DocumentList` — визуальная проверка.
 
-## В работе (DEV, очередь — не закоммичено)
+## Сделано, закоммичено
 
-Направление: **вариант 3 — сцены-шаблоны** + атомы-fallback. Пакеты Remotion — аппрув получен.
+- `e06e6d8` — PKG-1: `@remotion/{transitions,shapes,paths,motion-blur,layout-utils,animation-utils}@4.0.490`
+- `8fffd3b` — TPL-1 (`src/templates/` + `TEMPLATE_REGISTRY` + `SequentialReveal` + `useReveal`
+  + `SceneFrame.resolveScene`) и SCRIPT-1 (`video-05.ts` «Вайб-кодинг», 9 сцен, 1545 кадров, `Video05`).
+  Направление: **вариант 3 — сцены-шаблоны**.
 
-- **PKG-1** — установить `@remotion/{transitions,shapes,paths,motion-blur,layout-utils,animation-utils}@4.0.490`.
-- **TPL-1** — `src/templates/` + `TEMPLATE_REGISTRY`; шаблон `SequentialReveal`
-  (элементы по очереди сверху вниз по зонам grid, вход fade+подъём, `mode: paper|ink`);
-  примитив `useReveal`.
-- **SCRIPT-1** — `src/videos/video-05.ts` из сценария «Как учиться вайб-кодингу»
-  (9 сцен, `SequentialReveal`, 1545 кадров ≈ 52 сек), композиция `Video05`.
+## В работе (DEV)
+
+- **PRIM-1** — унификация + расширение `src/primitives/` (единая сигнатура entrance-хуков
+  `useX(delay, opts) => CSSProperties`; SPRING/DURATION константы; новые: useDrop, useSlideLeft/Right,
+  useBlurIn, useMaskWipe, useZoomIn, useFloat, useBlink; `SequentialReveal.items[].enter?`;
+  старые хуки → `@deprecated`; демо `MotionDemo`).
+
+## Ждут аппрува владельца (пробелы из video-05)
+
+- **G1** — `layout: "stack"` у `SequentialReveal`: плотный вертикальный поток в одной зоне
+  (сейчас 1 элемент = 1 зона, дыра после заголовка в сценах-списках 5, 6).
+- **G2** — автоподгонка кегля `h1`/`h2` под ширину (через `@remotion/layout-utils`), сцена 7.
+- **G3** — `{ kind: "row", items: [...] }` / шаблон `LogoRow`: горизонтальный ряд логотипов, сцена 8.
+- **G4** — переходы между сценами: `transition?` в записи манифеста + `<TransitionSeries>` в `SceneFrame`.
+
+## Ждёт: визуальная приёмка `video-05` владельцем (Studio → `Video05`).
 
 ## Состояние project1/
 
