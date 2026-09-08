@@ -1,122 +1,74 @@
 # Handoff
 
-Дата: 2026-09-07
-
-## Итоги сессии 2026-09-07
-
-Полный отчёт — `outputs/session-summary.md`. Кратко:
-
-1. Анализ проекта + клиентский апдейт (`outputs/client-update.md`).
-2. Разобран риск «UI-kit ↔ Remotion» (`outputs/ui-kit-remotion-warnings.md`);
-   добавлен `src/components/ui/README.md`; алиас `@/` в `tsconfig.json`.
-3. Чистка legacy: удалён дубль `components-preset/`; удалены `theme.ts` / `colors.ts` /
-   `fonts.ts` / `easing.ts` и 10 неиспользуемых legacy-пресетов.
-4. Создан модуль **`src/common/design-system/`** — единый источник токенов
-   (`text` / `color` / `space` / `radius` / `stroke` / `elevation` / `video` + `fonts`,
-   `palette`, `scale`, `motion`). На него мигрированы 9 пресетов, `SceneFrame`,
-   4 композиции, 4 манифеста.
-5. Гайдлайн **`design-system/about.md`** (senior-дизайнер) — светлый редакционный
-   минимализм: белый фон, тонкая почти-чёрная типографика (max Regular), зелёный
-   `#CCFF00` только как редкая заливка-маркер.
-6. Шрифты применены: SF Pro Display (Thin/Light) + Montserrat (Light/Regular),
-   `fontWeight` = `thin/light/regular`, все пресеты на тонких весах.
-7. Новые пресеты/композиции: `IntroPanel`+`Video04`, `Video03`; примитивы
-   `useSpin` / `useTypewriter`.
-
-**Не сделано (следующий шаг):** флип цветов на светлую тему + пересбор хардкод-цветов
-в пресетах. См. «Next steps» ниже и `about.md` §7.
-
----
+Дата: 2026-09-08. Ведёт PM-сессия.
 
 ## Над чем работаем
 
-Агентский цикл генерации коротких вертикальных видео (1080×1920) на Remotion;
-новое видео = один манифест `project1/src/videos/video-XX.ts`. Сейчас — проработка
-design system.
+Сервис генерации коротких вертикальных роликов (1080×1920) на Remotion.
+Ниша уточнена: **обучающие ролики по программированию для Instagram, серийные.**
+Этап: **M1** — привести рендер-слой и дизайн-систему к дизайн-манифесту.
+Полная структура — `docs/`. Роли сессий — `docs/roles/`.
 
-## Состояние проекта (`project1/`)
+## Дизайн-манифест — ПРИНЯТ (2026-09-08)
 
-### Design system — единый модуль `src/common/design-system/`
-- `fonts.ts` — **SF Pro Display** (заголовки) + **Montserrat** (остальное) + mono;
-  `palette.ts` — сырая палитра (тема shadcn dark), `scale.ts` — числовые шкалы,
-  `tokens.ts` — **семантика** (правится здесь), `motion.ts` — EASE, `index.ts` — вход. README рядом.
-- Шрифты: `fontDisplay` (SF Pro Display) для `text.display/heading/subheading`,
-  `fontBody` (Montserrat) для `text.title/body/caption`, `fontMono` для терминальных эффектов.
-- **`design-system/about.md`** — гайдлайн по токенам (senior-дизайнер), актуальная
-  версия: **светлый редакционный минимализм** — белый / светло-серый фон, тонкая
-  почти-чёрная типографика (max Regular), зелёный `#CCFF00` только как редкая
-  заливка-маркер (0–1 на кадр, как текст на белом запрещён — есть `accentInk` для
-  зелёных пометок). Шкала 150/96/60/36/28/22, tracking 0. §7 файла — таблица
-  расхождений с кодом.
-- **Частично применено** (шрифты/веса): `fonts.ts` грузит Montserrat 100/300/400 и
-  SF Pro Thin/Light/Regular; `scale.ts:fontWeight` = только `thin/light/regular`;
-  `text.*` роли и все пресеты переведены на тонкие веса; tracking у display/heading → 0.
-- **НЕ применено** (следующий шаг): цвета всё ещё тёмная тема (`palette` = `paletteDark`,
-  `color.text` почти-белый). Флип на светлую тему + пересбор хардкод-цветов в пресетах —
-  впереди (см. §7 about.md).
-  Montserrat — через `@remotion/google-fonts/Montserrat` (пакет уже был). SF Pro Display —
-  файлы .woff2 в `public/fonts/` (инструкция — `public/fonts/README.md`, имена обновлены на
-  Thin/Light/Regular); пока их нет — системный SF Pro на macOS / Montserrat как fallback.
-- Семантика: `text` (роли display / heading / subheading / title / body / caption —
-  каждая = готовый объект стилей с fontFamily+size+weight+lineHeight+color),
-  `color` (text/textMuted/textFaint/bg/surface/border/accent/danger/series.*),
-  `space`, `radius`, `stroke`, `elevation`, `video`, `tint()`.
-  Целевые значения — в `about.md`; часть ещё не применена (см. ниже).
-- CSS-зеркало палитры — `src/index.css` (`:root`/`.dark`), синхронить при правке `palette.ts`.
+Канон — `project1/src/common/design-system/about.md`. Кратко:
+- Строго чёрно-белый, два режима кадра: `paper` (белый/чёрный fg), `ink` (чёрный/белый fg).
+  Полутонов и акцента нет (`#CCFF00`, `series.*`, `danger` — удаляются).
+- Один шрифт — **Montserrat**, веса Thin/Light/Regular, максимум Regular. SF Pro убирается.
+- В кадре только контент: типографика, монохромные логотипы, монохромные иконки, геометрия.
+  Ни видео, ни фото, ни людей, ни кода на экране, ни цвета.
+- Движение — профессиональный motion-design средствами Remotion.
+- Открытые вопросы (референсы, настроение, правило смены режимов, плотность, фирменная
+  деталь, язык, нумерация, субтитры, набор иконок) — §8 манифеста, ждут владельца.
 
-### Удалено (старая тема)
-- `src/common/theme.ts`, `colors.ts`, `fonts.ts`, `easing.ts` — заменены модулем DS.
-- 10 неиспользуемых legacy-пресетов (`BackgroundGrid`, `CinematicSciFi`, `GlitchHook`,
-  `LayoutOffGrid`, `ListHeroWithList`, `ListMinimalLeft`, `RollerTypewriter`,
-  `Transition*`) — были off-contract, ни в одном манифесте. Убраны из `registry.ts`.
-- Ранее: `components-preset/` из корня (дубль).
+## Сделано в этой сессии
 
-### Пресеты (9 в реестре)
-`BlurReveal`, `CounterDuo`, `DocumentList`, `GridScene`, `HeroBadge`, `HookScene`,
-`IntroPanel`, `SlideInList`, `TextTypewriter` — все переведены на токены DS.
+- Написана структура проекта `docs/01..09` + роли `docs/roles/`. Закоммичено
+  (`1d98da0`, `4c41947`).
+- **DEL-1** (DEV, НЕ закоммичено): удалён shadcn UI-kit `src/components/ui/**`,
+  `IntroPanel`, `Video04`, `video-04.ts`, `src/index.css`; убрана Tailwind-обвязка
+  и её зависимости; `palette.ts` → плоский placeholder (`#000/#fff`-нейтраль);
+  `tokens.ts` переключён на него; 8 пресетов в реестре. tsc 0, bundle ok.
+  DEV попутно поправил `design-system/README.md` и `about.md §7` (я переписал
+  `about.md` целиком под манифест).
 
-### Композиции / манифесты
-- `MyFirstVideo` (video-01), `Video03` (video-03, 10с), `Video04` (video-04, 12с),
-  `GridSystemDemo`. Все манифесты мигрированы на `color.*` / `text.*`.
-- ⚠️ video-01/02 при миграции получили ближайшие токены — палитра/размеры слегка
-  сдвинулись относительно старых (ожидаемо, старую тему не сохраняем).
+## ⚠️ Блокер: git
 
-### UI-kit
-`src/components/ui/*` (14 shadcn-компонентов) — жив, типизируется (алиас `@/` в
-tsconfig), README рядом. CSS-анимации в Remotion не работают — движение только
-через `src/primitives/`.
+- `project1/.git` **исчез** (был отдельный репозиторий с историей — `Refactor to
+  declarative manifest-driven architecture`). История `project1/` потеряна.
+- Корневой `.gitignore` содержит `project1/` → рабочий репозиторий `project1/`
+  **не видит**. Значит **изменения DEL-1 не закоммитить.**
+- Нужно решение INFRA-1: убрать `project1/` из `.gitignore`, `git add project1/`,
+  сделать монорепо. Ждёт владельца.
 
-### Примитивы (`src/primitives/index.ts`)
-Добавлены `useSpin`, `useTypewriter` (для IntroPanel).
+## Состояние project1/
 
-## Проверки
-
-- `npx tsc --noEmit` — **0 ошибок**.
-- `npx eslint src` — 3 errors + 1 warning, все пред-существующие (SceneFrame `any` —
-  намеренно; GridScene native `<img>`; registry `any`; progress.tsx non-pure-animation).
-- `npm run dev` — студия собирается (`Built in 878ms`), :3000.
-- safe-зоны чисто; `grep` по старым ссылкам (`common/theme`, `colors.`, `typography.`,
-  `videoConfig`) — пусто.
-- Арифметика: video-01 TOTAL=500, video-02=450, video-03=300, video-04=360 — совпадает
-  с суммой `duration`.
+- Пресеты (8): `BlurReveal`, `CounterDuo`, `DocumentList`, `GridScene`, `HeroBadge`,
+  `HookScene`, `SlideInList`, `TextTypewriter`. Держат хардкод старых цветов — под манифест не приведены.
+- Композиции: `MyFirstVideo` (video-02, 450), `Video03` (300), `GridSystemDemo` (150).
+  `video-01.ts` существует, ни к одной композиции не привязан.
+- `src/common/design-system/`: `fonts.ts` (Montserrat + SF Pro — SF Pro убрать),
+  `palette.ts` (placeholder), `scale.ts`, `tokens.ts`, `motion.ts`, `grid.ts`.
+- `src/primitives/index.ts`: `useFadeIn/useBlurReveal/useScaleIn/useSlideX/useSpin/useTypewriter`.
+- Remotion 4.0.490; пакеты: `remotion`, `@remotion/cli`, `@remotion/google-fonts`.
+- Шрифты SF Pro `.woff2` в `public/fonts/` отсутствуют (станет неактуально после
+  перехода на «только Montserrat»).
 
 ## Next steps
 
-1. **Флип на светлую тему** (по `about.md` §7): `palette.ts` → базовая `paletteLight`;
-   `tokens.ts` `color.*` (bg белый, text `#141414`, серая лестница, `accent` только
-   заливка, + `accentInk`, `textInverse`); `scale.ts` `fontSize` 150/96/60/36/28/22,
-   `spacePx`/`radiusPx`; `elevation` без glow.
-2. **Пересбор хардкод-цветов в пресетах** под светлый фон — `HookScene`, `DocumentList`,
-   `SlideInList` и др. держат тёмные `rgba(255,255,255,…)`, `#1e1b4b`, тёмные градиенты;
-   зелёные слова (`color.accent` как текст) → `color.text` / `accentInk`.
-3. **`src/index.css`** синхронизировать с `paletteLight`; затем **`DesignSystemDemo`**
-   (по образцу `GridSystemDemo`) — свотчи, все роли `text`, тени — визуальная проверка.
-
-Также: положить файлы SF Pro Display в `public/fonts/` (Thin/Light/Regular) — без них
-заголовки = системный SF Pro (macOS) / Montserrat.
+1. **INFRA-1** (владелец): решить git-структуру, чтобы можно было закоммитить DEL-1.
+2. **Аппрув пакетов Remotion** под motion-design: `@remotion/transitions`, `@remotion/shapes`,
+   `@remotion/paths`, `@remotion/motion-blur`, `@remotion/layout-utils`, `@remotion/animation-utils`
+   (+ возможно `@remotion/lottie`). См. предложение PM по реализации.
+3. **DS-1** (DEV): `palette.ts` → `#000/#fff`; `tokens.ts` `color` → `ink/paper/fg/bg`,
+   убрать `accent/danger/series/textMuted/textFaint`; `fonts.ts` → только Montserrat;
+   `text.*` → Montserrat; убрать `elevation`. Прогнать `video-01..03` визуально (владелец).
+4. Пересобрать backlog M1 под манифест (эпик DS переписать: DS-1 новый смысл, добавить
+   движок сцены с режимом `paper/ink`, motion-паки, логотип/иконка-атомы).
 
 ## Правила
 
-- `inputs/` не менять. Результаты — в `outputs/`. Данные не выдумывать.
-- Новые пакеты не ставить без вопроса.
-- Цвета/размеры/шрифт — только через токены DS, не строками в пресетах.
+- `inputs/` не менять. Разборы — в `outputs/`. Данные не выдумывать.
+- Новые пакеты — только с аппрувом владельца.
+- Цвет/размер/шрифт — только через токены, не строками в пресетах. Два цвета, точка.
+- Коммитит владелец вручную; PM обновляет этот файл после.
