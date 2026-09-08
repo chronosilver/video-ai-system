@@ -23,23 +23,26 @@
 
 ## Сделано в этой сессии
 
-- Написана структура проекта `docs/01..09` + роли `docs/roles/`. Закоммичено
-  (`1d98da0`, `4c41947`).
-- **DEL-1** (DEV, НЕ закоммичено): удалён shadcn UI-kit `src/components/ui/**`,
-  `IntroPanel`, `Video04`, `video-04.ts`, `src/index.css`; убрана Tailwind-обвязка
-  и её зависимости; `palette.ts` → плоский placeholder (`#000/#fff`-нейтраль);
-  `tokens.ts` переключён на него; 8 пресетов в реестре. tsc 0, bundle ok.
-  DEV попутно поправил `design-system/README.md` и `about.md §7` (я переписал
-  `about.md` целиком под манифест).
+- Структура проекта `docs/01..09` + роли `docs/roles/` (`1d98da0`, `4c41947`).
+- Дизайн-манифест B&W записан (`8af3e4f`); канон — `project1/src/common/design-system/about.md`.
+- **INFRA-1 закрыта** (`e707943`): `project1/.git` был утрачен → `project1/` влит в
+  корневой репозиторий как обычная папка. Монорепо. `.gitignore` обновлён.
+- **DEL-1** (в `e707943`): удалён shadcn UI-kit, `IntroPanel`, `Video04`, `index.css`,
+  Tailwind-обвязка + зависимости; `palette.ts` → placeholder; 8 пресетов.
+- **TYPO-1** (в `e707943`): аддитивно `text.h1/h2/body/small` (без цвета) +
+  `color.black/white/gray`; демо `TypographyDemo`. `GridScene` — фикс 2 строки (фолбэк).
+  ⚠️ Владельцу: `body` 26→32 укрупняет `SlideInList`/`DocumentList` — визуальная проверка.
 
-## ⚠️ Блокер: git
+## В работе (DEV, очередь — не закоммичено)
 
-- `project1/.git` **исчез** (был отдельный репозиторий с историей — `Refactor to
-  declarative manifest-driven architecture`). История `project1/` потеряна.
-- Корневой `.gitignore` содержит `project1/` → рабочий репозиторий `project1/`
-  **не видит**. Значит **изменения DEL-1 не закоммитить.**
-- Нужно решение INFRA-1: убрать `project1/` из `.gitignore`, `git add project1/`,
-  сделать монорепо. Ждёт владельца.
+Направление: **вариант 3 — сцены-шаблоны** + атомы-fallback. Пакеты Remotion — аппрув получен.
+
+- **PKG-1** — установить `@remotion/{transitions,shapes,paths,motion-blur,layout-utils,animation-utils}@4.0.490`.
+- **TPL-1** — `src/templates/` + `TEMPLATE_REGISTRY`; шаблон `SequentialReveal`
+  (элементы по очереди сверху вниз по зонам grid, вход fade+подъём, `mode: paper|ink`);
+  примитив `useReveal`.
+- **SCRIPT-1** — `src/videos/video-05.ts` из сценария «Как учиться вайб-кодингу»
+  (9 сцен, `SequentialReveal`, 1545 кадров ≈ 52 сек), композиция `Video05`.
 
 ## Состояние project1/
 
@@ -56,15 +59,15 @@
 
 ## Next steps
 
-1. **INFRA-1** (владелец): решить git-структуру, чтобы можно было закоммитить DEL-1.
-2. **Аппрув пакетов Remotion** под motion-design: `@remotion/transitions`, `@remotion/shapes`,
-   `@remotion/paths`, `@remotion/motion-blur`, `@remotion/layout-utils`, `@remotion/animation-utils`
-   (+ возможно `@remotion/lottie`). См. предложение PM по реализации.
-3. **DS-1** (DEV): `palette.ts` → `#000/#fff`; `tokens.ts` `color` → `ink/paper/fg/bg`,
-   убрать `accent/danger/series/textMuted/textFaint`; `fonts.ts` → только Montserrat;
-   `text.*` → Montserrat; убрать `elevation`. Прогнать `video-01..03` визуально (владелец).
-4. Пересобрать backlog M1 под манифест (эпик DS переписать: DS-1 новый смысл, добавить
-   движок сцены с режимом `paper/ink`, motion-паки, логотип/иконка-атомы).
+1. Ревью PKG-1 / TPL-1 / SCRIPT-1 по мере готовности; владелец коммитит.
+2. **Чистка старых токенов** (после SCRIPT-1): убрать `text.display/heading/subheading/title/caption`,
+   `color.text/textMuted/textFaint/accent/danger/series`, `tint`, `elevation`;
+   мигрировать 8 пресетов на новые токены + режим `paper/ink`. Прогнать `video-01..03` визуально.
+3. **`fonts.ts` → только Montserrat** (убрать SF Pro Display).
+4. Ответы владельца на открытые вопросы стиля (`about.md` §8): референсы, настроение,
+   правило смены режимов, плотность, фирменная деталь, язык, нумерация, субтитры, набор иконок.
+5. Логотип-ассеты (`public/logos/`, монохром SVG): Claude, Cursor, Copilot/GitHub, Apple.
+6. Пересобрать backlog M1 под манифест и вариант 3 (эпик DS → шаблоны + атомы + motion).
 
 ## Правила
 
