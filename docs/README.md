@@ -45,17 +45,18 @@
 
 ## Две сессии (PM + DEV)
 
-Проект ведётся двумя параллельными сессиями Claude Code с разными ролями:
-
-| Сессия | Папка (git-репозиторий) | Роль |
+| Сессия | Где | Роль |
 |---|---|---|
-| **PM** | `~/remotion/vibe-starter` (корневой) | [roles/product.md](roles/product.md) — `docs/`, бэклог, приоритеты |
-| **DEV** | `~/remotion/vibe-starter/project1` (`project1/.git`) | [roles/developer.md](roles/developer.md) — код рендер-слоя |
+| **PM** | Claude, папка `~/remotion/vibe-starter` | [roles/product.md](roles/product.md) — ТЗ, ревью, весь трекинг |
+| **DEV** | терминал (`cd project1 && claude`), владелец наблюдает | [roles/developer.md](roles/developer.md) — только код по ТЗ |
 
-В начале сессии: **«Читай свою роль — `docs/roles/<product|developer>.md`»**.
-Связь между сессиями — через `handoff.md` (тех-состояние) и `docs/08-backlog.md`
-(задачи). Опциональная жёсткая изоляция кода — worktree:
-`git -C project1 worktree add ../project1-dev -b dev`.
+**Цикл:** PM даёт владельцу блок ТЗ → владелец несёт его в терминал, смотрит работу
+DEV → владелец приносит результат в PM («посмотри что сделал dev») → PM читает
+рабочее дерево до коммита, даёт вердикт → **владелец коммитит вручную**, PM обновляет
+`handoff.md` / бэклог.
+
+DEV не коммитит и не трогает `docs/` / `handoff.md`. В начале DEV-сессии:
+**«Читай свою роль — `../docs/roles/developer.md`»** + блок ТЗ.
 
 ## Где что лежит в репозитории
 
