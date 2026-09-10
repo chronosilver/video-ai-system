@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анастасия · программирование для школьников</title>
+<meta name="description" content="Индивидуальные онлайн-занятия: Python для ОГЭ и ЕГЭ, разработка сайтов, Lua для Minecraft и Roblox. Упор на практику и понимание. Первый урок бесплатно.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+  :root{
+    --purple-deep:#3a1d70;
+    --purple-darker:#2c1358;
+    --bg:#241147;
+    --lav:#7c5cff;
+    --lime:#b7e61e;
+    --white:#ffffff;
+    --page:#ece9fb;
+    --ink:#241a3d;
+    --ink-soft:#6b6088;
+    --card-line:#ddd6f5;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:Montserrat,system-ui,sans-serif;
+    color:var(--white);
+    background:var(--purple-darker);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+  section{padding:76px 0}
+  .eyebrow{font-weight:700;font-size:13px;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);margin-bottom:18px}
+  h1{font-weight:800;font-size:clamp(34px,6vw,60px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance}
+  h2{font-weight:800;font-size:clamp(26px,4vw,40px);line-height:1.12;letter-spacing:-.6px;margin-bottom:14px;text-wrap:balance}
+  p.lead{font-size:clamp(17px,2.2vw,21px);line-height:1.55;font-weight:500;max-width:46ch}
+
+  /* backdrops */
+  .dark{
+    background:
+      radial-gradient(120% 80% at 85% 10%, #4d2c8c 0%, rgba(77,44,140,0) 55%),
+      radial-gradient(90% 90% at 5% 100%, #3a1d70 0%, rgba(58,29,112,0) 60%),
+      linear-gradient(160deg,#3a1d70 0%,#2c1358 100%);
+    position:relative;
+  }
+  .dark::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .light{background:var(--page);color:var(--ink)}
+  .light .eyebrow{color:#7c3aed}
+  .dark .wrap,.light .wrap{position:relative;z-index:2}
+
+  .comet{position:absolute;width:8px;height:8px;border-radius:50%;background:#bca9f0;z-index:1}
+  .comet::before{content:"";position:absolute;right:5px;top:2px;width:110px;height:2px;background:linear-gradient(90deg,rgba(188,169,240,0),#bca9f0);transform:rotate(33deg);transform-origin:right center}
+
+  /* logo */
+  .brand{display:inline-flex;font-weight:800;font-size:24px;letter-spacing:-.5px}
+  .brand .a{color:var(--lime)}
+
+  /* hero */
+  .hero{padding-top:40px;padding-bottom:80px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-top:20px}
+  .hero .role{font-size:clamp(16px,2.3vw,20px);font-weight:600;color:#d9ccff;margin:20px 0 26px;max-width:34ch}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.4px;padding:9px 16px;border-radius:999px;margin-bottom:26px}
+  .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink)}
+  .cta{display:flex;flex-wrap:wrap;gap:14px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:16px;padding:14px 22px;border-radius:12px;text-decoration:none;transition:transform .15s ease}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-lime{background:var(--lime);color:var(--ink)}
+  .btn-ghost{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.35)}
+
+  .photo-frame{background:var(--lav);border-radius:20px;padding:14px 14px 16px;box-shadow:0 30px 70px -20px rgba(0,0,0,.55);max-width:360px;margin-left:auto}
+  .photo-frame .bar{display:flex;gap:7px;margin-bottom:12px}
+  .photo-frame .bar span{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .photo-frame img{border-radius:12px;aspect-ratio:1/1;object-fit:cover;object-position:center top;background:#3a1d70}
+  .photo-frame .cap{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.85);margin-top:10px;text-align:center}
+
+  /* facts */
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+  .fact{background:#fff;border:2px solid var(--card-line);border-radius:14px;padding:18px}
+  .fact b{display:block;font-size:26px;font-weight:800;color:#7c3aed;line-height:1}
+  .fact span{font-size:14px;font-weight:600;color:var(--ink-soft);margin-top:8px;display:block}
+
+  /* direction cards */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:34px}
+  .card{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.16);border-radius:18px;padding:26px}
+  .card .k{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--lime);text-transform:uppercase}
+  .card h3{font-size:22px;font-weight:800;margin:10px 0 10px}
+  .card p{font-size:16px;line-height:1.5;font-weight:500;color:#e2d9fb}
+  .card .age{display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:#cbbdf2;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px}
+
+  .addon{display:flex;gap:20px;align-items:flex-start;margin-top:28px;background:rgba(255,255,255,.06);border-left:5px solid var(--lime);border-radius:0 14px 14px 0;padding:22px 26px}
+  .addon .tag{flex:none;font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--lime);text-transform:uppercase;padding-top:3px}
+  .addon p{font-size:16px;line-height:1.55;font-weight:500;color:#e2d9fb}
+
+  /* how */
+  .how{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 34px;margin-top:30px;max-width:820px}
+  .how li{list-style:none;position:relative;padding-left:30px;font-size:17px;line-height:1.5;font-weight:500}
+  .how li::before{content:"›";position:absolute;left:6px;top:-2px;color:var(--lime);font-weight:800;font-size:22px}
+
+  /* student work */
+  .work{margin-top:20px;display:grid;gap:26px}
+  .proj{background:#fff;border:2px solid var(--card-line);border-radius:18px;padding:24px;color:var(--ink)}
+  .proj h3{font-size:20px;font-weight:800;margin-bottom:4px}
+  .proj .who{font-size:14px;font-weight:600;color:var(--ink-soft);margin-bottom:14px}
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .shot{aspect-ratio:16/10;border-radius:10px;background:linear-gradient(135deg,#efeafc,#e2dbf6);border:1px dashed #c9bef0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:#9a8fc0;text-align:center;padding:6px;overflow:hidden}
+  a.shot{border-style:solid;border-color:var(--card-line);cursor:zoom-in;padding:0;transition:transform .15s ease,box-shadow .15s ease}
+  a.shot:hover{transform:translateY(-2px);box-shadow:0 12px 24px -10px rgba(58,29,112,.4)}
+  a.shot:focus-visible{outline:3px solid #7c3aed;outline-offset:2px}
+  .shot img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
+
+  .lb{position:fixed;inset:0;z-index:100;background:rgba(20,12,43,.92);display:flex;align-items:center;justify-content:center;padding:32px;opacity:0;pointer-events:none;transition:opacity .18s ease}
+  .lb.open{opacity:1;pointer-events:auto}
+  .lb img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+  .lb .x{position:absolute;top:22px;right:26px;width:44px;height:44px;border-radius:12px;border:none;background:rgba(255,255,255,.12);color:#fff;font-size:24px;cursor:pointer;line-height:1}
+  .lb .x:hover{background:var(--lime);color:var(--ink)}
+
+  /* price */
+  .price-box{margin-top:26px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.16);border-radius:18px;padding:30px;max-width:640px}
+  .price-box p{font-size:17px;line-height:1.55;font-weight:500;color:#e2d9fb}
+  .price-box .big{font-size:22px;font-weight:800;color:var(--white);margin-bottom:10px}
+
+  /* final */
+  .final{text-align:center}
+  .final h2{margin-bottom:18px}
+  .final .cta{justify-content:center}
+  .contact-line{margin-top:22px;font-family:var(--mono);font-size:15px;color:#cbbdf2}
+  .contact-line a{color:var(--lime);text-decoration:none}
+
+  /* program accordion */
+  .prog{display:grid;gap:12px;margin-top:30px;max-width:800px}
+  details.acc{background:#fff;border:2px solid var(--card-line);border-radius:14px;overflow:hidden}
+  details.acc summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:800;font-size:18px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:14px}
+  details.acc summary::-webkit-details-marker{display:none}
+  details.acc summary .ic{flex:none;width:26px;height:26px;border-radius:7px;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;transition:transform .2s ease}
+  details.acc[open] summary .ic{transform:rotate(45deg)}
+  details.acc .inner{padding:2px 22px 22px}
+  details.acc .inner .m{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#7c3aed;margin-bottom:12px}
+  details.acc ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  details.acc li{position:relative;padding-left:22px;font-size:15.5px;line-height:1.45;font-weight:500;color:var(--ink)}
+  details.acc li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:2px;background:#7c3aed}
+
+  footer{padding:30px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.45);background:var(--purple-darker)}
+
+  @media (max-width:860px){
+    section{padding:56px 0}
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .photo-frame{margin:0 auto}
+    .facts{grid-template-columns:repeat(2,1fr)}
+    .cards{grid-template-columns:1fr}
+    .how{grid-template-columns:1fr;gap:14px}
+    .shots{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<header class="dark hero">
+  <i class="comet" style="top:80px;right:8%"></i>
+  <i class="comet" style="top:280px;left:4%;transform:scale(.7)"></i>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="pill">Первый урок — бесплатно</div>
+        <h1>Программирование для школьников</h1>
+        <p class="role">Онлайн-занятия с преподавателем Python, JavaScript и Lua. Индивидуально, с упором на практику и понимание, а не зубрёжку.</p>
+        <div class="cta">
+          <a class="btn btn-lime" href="https://t.me/stacyosx" target="_blank" rel="noopener">Написать в Telegram</a>
+          <a class="btn btn-ghost" href="https://wa.me/79259256545" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+      <div>
+        <figure class="photo-frame">
+          <div class="bar"><span></span><span></span><span></span></div>
+          <img src="photo.jpg" alt="Анастасия, преподаватель программирования">
+          <figcaption class="cap">Анастасия · online</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow">Обо мне</div>
+    <h2>4 года преподаю детей программированию</h2>
+    <p class="lead">Работала в топовых школах России и мира — Coddy и RTS. Мне 25, за плечами опыт работы в двух стартапах в роли IT-разработчика, один из них — резидент «Сколково». Сейчас живу в Азии и преподаю онлайн по всему миру.</p>
+    <div class="facts">
+      <div class="fact"><b>4 года</b><span>преподавания</span></div>
+      <div class="fact"><b>Coddy · RTS</b><span>топовые IT-школы</span></div>
+      <div class="fact"><b>2 стартапа</b><span>IT-разработчик</span></div>
+      <div class="fact"><b>Сколково</b><span>резидент проектов</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <i class="comet" style="top:60px;left:6%;transform:scale(.7)"></i>
+  <div class="wrap">
+    <div class="eyebrow">Направления</div>
+    <h2>Чему я учу</h2>
+    <p class="lead">Главное — программирование. Каждое направление ведёт к своему результату: сданный экзамен, готовый сайт, своя игра.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="k">Python</div>
+        <h3>Python: ОГЭ и ЕГЭ по информатике</h3>
+        <p>С нуля до уверенного решения задач на программу. Разбираем задания 15–16 ОГЭ и аналоги ЕГЭ, учимся читать и писать код, а не заучивать шаблоны.</p>
+        <span class="age">14–17 лет</span>
+      </div>
+      <div class="card">
+        <div class="k">Web</div>
+        <h3>Разработка сайтов</h3>
+        <p>HTML, CSS и JavaScript. К концу курса у ученика — свой рабочий сайт в портфолио, который можно показать. Дальше ученики берутся за реальные коммерческие проекты — для многих это становится новой профессией.</p>
+        <span class="age">12–17 лет</span>
+      </div>
+      <div class="card">
+        <div class="k">Lua</div>
+        <h3>Lua в Minecraft</h3>
+        <p>Программирование роботов-черепах: скрипты, циклы, логика. Дети управляют миром игры кодом и видят результат сразу.</p>
+        <span class="age">10–15 лет</span>
+      </div>
+      <div class="card">
+        <div class="k">Lua</div>
+        <h3>Lua в Roblox</h3>
+        <p>Своя игра в Roblox Studio: механики, скрипты, взаимодействие объектов. От идеи до играбельного проекта.</p>
+        <span class="age">10–15 лет</span>
+      </div>
+    </div>
+
+    <div class="addon">
+      <div class="tag">Дополнительно</div>
+      <p>Английский для школьников — школьная программа и разговорный язык, в том числе для билингвов. По договорённости, отдельно или в сочетании с программированием.</p>
+    </div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow">Как проходят занятия</div>
+    <h2>Онлайн, один на один, 1 час</h2>
+    <ul class="how">
+      <li>Только индивидуально — темп и программа под конкретного ученика</li>
+      <li>Упор на практику: ученик пишет код сам с первого занятия</li>
+      <li>Объясняю до понимания, а не «запомни и повтори»</li>
+      <li>Занятия на русском, работаю и с билингвами ру / англ</li>
+      <li>Каждая тема закрепляется мини-проектом</li>
+      <li>Первый пробный урок — бесплатно, чтобы понять уровень и цели</li>
+    </ul>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap">
+    <div class="eyebrow">Работы учеников</div>
+    <h2>Что делают мои ученики</h2>
+    <div class="work">
+      <div class="proj">
+        <h3>Калькулятор «брейнрот»</h3>
+        <div class="who">Миша, 13 лет · сайт на HTML / CSS / JavaScript</div>
+        <div class="shots">
+          <div class="shot">скриншот 1</div><div class="shot">скриншот 2</div><div class="shot">скриншот 3</div><div class="shot">скриншот 4</div>
+        </div>
+      </div>
+      <div class="proj">
+        <h3>Сайт студии маникюра</h3>
+        <div class="who">Артём, 15 лет · сайт для мамы, вёрстка с нуля</div>
+        <div class="shots">
+          <a class="shot" href="web1.jpeg" data-lb><img src="web1.jpeg" alt="Сайт студии маникюра — экран 1" loading="lazy"></a>
+          <a class="shot" href="web2.jpeg" data-lb><img src="web2.jpeg" alt="Сайт студии маникюра — экран 2" loading="lazy"></a>
+          <a class="shot" href="web3.jpeg" data-lb><img src="web3.jpeg" alt="Сайт студии маникюра — экран 3" loading="lazy"></a>
+          <a class="shot" href="web4.jpeg" data-lb><img src="web4.jpeg" alt="Сайт студии маникюра — экран 4" loading="lazy"></a>
+        </div>
+      </div>
+      <div class="proj">
+        <h3>Роботы-черепахи строят дом</h3>
+        <div class="who">Ярослав · Minecraft, программирование черепах на Lua</div>
+        <div class="shots">
+          <div class="shot">скриншот 1</div><div class="shot">скриншот 2</div><div class="shot">скриншот 3</div><div class="shot">скриншот 4</div>
+        </div>
+      </div>
+      <div class="proj">
+        <h3>Своя игра в Roblox</h3>
+        <div class="who">Гоша · Roblox Studio, скрипты на Lua</div>
+        <div class="shots">
+          <div class="shot">скриншот 1</div><div class="shot">скриншот 2</div><div class="shot">скриншот 3</div><div class="shot">скриншот 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow">Стоимость</div>
+    <h2>Дешевле, чем в школах, где я преподаю</h2>
+    <div class="price-box" style="background:#fff;border-color:var(--card-line)">
+      <p class="big" style="color:var(--ink)">Цена ниже, чем в топовых школах РФ и мира</p>
+      <p style="color:var(--ink-soft)">Точную стоимость и расписание обсуждаем на бесплатном пробном уроке — там же смотрим уровень ученика и составляем план.</p>
+    </div>
+  </div>
+</section>
+
+<section class="dark final">
+  <i class="comet" style="top:50px;right:10%;transform:scale(.7)"></i>
+  <div class="wrap">
+    <div class="eyebrow">Запись</div>
+    <h2>Начнём с бесплатного пробного урока</h2>
+    <p class="lead" style="margin:0 auto 26px">Напишите мне — обсудим, что интересно ребёнку, и подберём направление.</p>
+    <div class="cta">
+      <a class="btn btn-lime" href="https://t.me/stacyosx" target="_blank" rel="noopener">Написать в Telegram</a>
+      <a class="btn btn-ghost" href="https://wa.me/79259256545" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <div class="contact-line">Telegram <a href="https://t.me/stacyosx" target="_blank" rel="noopener">@stacyosx</a> &nbsp;·&nbsp; WhatsApp <a href="https://wa.me/79259256545" target="_blank" rel="noopener">+7 925 925 65 45</a></div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="wrap">
+    <div class="eyebrow">Программа занятий</div>
+    <h2>С чего начинается каждое направление</h2>
+    <p class="lead">Ниже — модуль 1, основы. Дальше программа строится под ученика: экзамен, свой проект или игра.</p>
+    <div class="prog">
+
+      <details class="acc" open>
+        <summary>Python · ОГЭ и ЕГЭ <span class="ic">+</span></summary>
+        <div class="inner">
+          <div class="m">Модуль 1 — основы</div>
+          <ul>
+            <li>Ввод и вывод, переменные, типы данных</li>
+            <li>Арифметика, целочисленное деление и остаток</li>
+            <li>Условия: if / elif / else, логические операторы</li>
+            <li>Циклы while и for, range</li>
+            <li>Списки: обработка последовательностей чисел</li>
+            <li>Разбор заданий 6 и 15–16 ОГЭ</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>Разработка сайтов <span class="ic">+</span></summary>
+        <div class="inner">
+          <div class="m">Модуль 1 — основы</div>
+          <ul>
+            <li>Как устроена страница: HTML-теги и структура</li>
+            <li>Текст, ссылки, изображения, списки, таблицы</li>
+            <li>CSS: цвета, шрифты, отступы, фон</li>
+            <li>Блочная вёрстка и Flexbox</li>
+            <li>Адаптивность под телефон</li>
+            <li>Первый мини-сайт в портфолио</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>Lua · Minecraft <span class="ic">+</span></summary>
+        <div class="inner">
+          <div class="m">Модуль 1 — основы</div>
+          <ul>
+            <li>Первый скрипт на роботе-черепахе</li>
+            <li>Переменные и команды движения</li>
+            <li>Циклы: повторяющиеся действия</li>
+            <li>Условия: реакция на препятствия</li>
+            <li>Функции: свои команды</li>
+            <li>Проект: черепаха строит стену и дом</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>Lua · Roblox <span class="ic">+</span></summary>
+        <div class="inner">
+          <div class="m">Модуль 1 — основы</div>
+          <ul>
+            <li>Roblox Studio: части, свойства, интерфейс</li>
+            <li>Переменные и типы данных в Lua</li>
+            <li>События: клик, касание, появление объекта</li>
+            <li>Условия и циклы в игровой логике</li>
+            <li>Скрипты на объектах и их взаимодействие</li>
+            <li>Проект: небольшая играбельная механика</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <i class="comet" style="top:70px;left:7%;transform:scale(.7)"></i>
+  <div class="wrap">
+    <div class="eyebrow">Родителям</div>
+    <h2>Что даёт бесплатный пробный урок</h2>
+    <p class="lead" style="max-width:56ch">За час мы вместе делаем небольшой проект и сразу видим результат — а потом ребёнок показывает его вам и рассказывает, чем мы занимались. Становится понятно, интересно ли ему это направление и с какого уровня начинать. После урока вы получаете честную обратную связь: что ребёнок уже умеет, что стоит подтянуть, примерный план и сроки.</p>
+    <p class="lead" style="max-width:56ch;margin-top:18px">Дальше мы занимаемся в комфортном для ребёнка темпе. Программу я подстраиваю под конкретного ученика, остаюсь на связи с родителями и рассказываю о прогрессе. Если пойму, что это направление ребёнку не подходит, скажу прямо и подскажу, что попробовать вместо него.</p>
+    <p class="lead" style="max-width:56ch;margin-top:18px">Даже если ребёнок не станет программистом, эти занятия развивают логику и умение думать пошагово — а это нужно везде, в том числе чтобы осмысленно пользоваться нейросетями, а не просто копировать ответы. И английский подтягивается сам собой: код, инструменты и документация — всё на английском, ребёнок привыкает читать и понимать язык в деле.</p>
+    <ul class="how" style="max-width:760px">
+      <li>Занятия один на один — внимание только вашему ребёнку</li>
+      <li>Объясняю простым языком, от простого к сложному</li>
+      <li>4 года работы с детьми 10–17 лет в Coddy и RTS</li>
+      <li>Держу связь с родителями и не пропадаю между уроками</li>
+    </ul>
+  </div>
+</section>
+
+<footer>© <span id="y"></span> Анастасия · osx-agency.ru · программирование для школьников онлайн</footer>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <button class="x" id="lbx" aria-label="Закрыть">&times;</button>
+  <img id="lbimg" src="" alt="">
+</div>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  const lb = document.getElementById('lb');
+  const lbimg = document.getElementById('lbimg');
+  function closeLb(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbimg.src = ''; }
+  document.querySelectorAll('a.shot[data-lb]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      lbimg.src = a.getAttribute('href');
+      lbimg.alt = a.querySelector('img')?.alt || '';
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden','false');
+    });
+  });
+  lb.addEventListener('click', e => { if (e.target === lb || e.target.id === 'lbx') closeLb(); });
+  document.getElementById('lbx').addEventListener('click', closeLb);
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+
+</body>
+</html>
