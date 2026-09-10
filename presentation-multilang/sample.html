@@ -1,0 +1,93 @@
+<title>Мультиязычный проект</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --ink:#2b1a55;
+    --purple-deep:#3a1d70;
+    --purple-deeper:#2c1358;
+    --lime:#b7e61e;
+    --white:#ffffff;
+    --lav-panel:#7c5cff;
+    --page-light:#ece9fb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#191033;font-family:Montserrat,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+
+  .slide{
+    position:relative;width:min(96vw,1120px);aspect-ratio:16/9;overflow:hidden;
+    border-radius:10px;
+    background:
+      radial-gradient(120% 90% at 82% 18%, #4a2a86 0%, rgba(74,42,134,0) 55%),
+      radial-gradient(90% 80% at 12% 92%, #3a1d70 0%, rgba(58,29,112,0) 60%),
+      linear-gradient(160deg,#3a1d70 0%,#2c1358 100%);
+    color:var(--white);
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.6);
+  }
+  /* subtle paper noise */
+  .slide::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .logo{position:absolute;top:5.2%;left:6%;display:flex;align-items:center;font-weight:800;font-size:clamp(20px,3vw,34px);letter-spacing:-.5px;z-index:3}
+  .logo .a{color:var(--lime)}
+  .logo .b{color:var(--white)}
+
+  .body{position:absolute;left:6%;top:28%;right:38%;z-index:3}
+  h1{font-weight:800;font-size:clamp(34px,6.4vw,74px);line-height:1.02;letter-spacing:-1px;text-wrap:balance}
+  .meta{margin-top:clamp(28px,5vh,60px);display:grid;gap:clamp(4px,1.1vh,12px)}
+  .meta .k{color:var(--lime);font-weight:700;font-size:clamp(14px,2.1vw,23px)}
+  .meta .v{color:var(--white);font-weight:600;font-size:clamp(14px,2.1vw,23px)}
+
+  /* decorative comets */
+  .comet{position:absolute;z-index:2}
+  .comet i{display:block;width:10px;height:10px;border-radius:50%;background:#b9a6ef}
+  .comet::before{content:"";position:absolute;right:6px;top:4px;width:120px;height:2px;
+    background:linear-gradient(90deg,rgba(185,166,239,0),#b9a6ef);transform:rotate(32deg);transform-origin:right center}
+  .c1{top:9%;right:9%}
+  .c2{bottom:14%;left:10%}
+  .c3{top:20%;right:31%;transform:scale(.7)}
+
+  /* window panel with monitor + person, monochrome-ish nod to reference art */
+  .art{position:absolute;right:5%;bottom:8%;width:34%;z-index:2}
+  .window{background:var(--lav-panel);border-radius:14px;padding:14px 14px 20px;box-shadow:0 20px 50px -12px rgba(0,0,0,.5)}
+  .window .bar{display:flex;gap:7px;margin-bottom:12px}
+  .window .bar span{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .window .code{display:grid;gap:7px}
+  .window .code b{height:7px;border-radius:4px;background:rgba(255,255,255,.55);display:block}
+  .window .code b:nth-child(1){width:70%}
+  .window .code b:nth-child(2){width:52%}
+  .window .code b:nth-child(3){width:84%}
+  .window .code b:nth-child(4){width:44%}
+  .window .code b:nth-child(5){width:66%}
+  .flags{position:absolute;left:-16px;bottom:26px;display:grid;gap:8px}
+  .flags span{width:44px;height:30px;border-radius:5px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;background:#241447;color:var(--lime);border:2px solid rgba(255,255,255,.18)}
+</style>
+
+<div class="slide">
+  <div class="logo"><span class="b">&gt;[</span><span class="a">rts</span><span class="b">&gt;</span></div>
+
+  <div class="comet c1"><i></i></div>
+  <div class="comet c2"><i></i></div>
+  <div class="comet c3"><i></i></div>
+
+  <div class="body">
+    <h1>Мультиязычный проект</h1>
+    <div class="meta">
+      <div class="k">Модуль 4</div>
+      <div class="v">Создание портфолио</div>
+      <div class="k">Тема 31</div>
+      <div class="v">Организация страниц и языков</div>
+    </div>
+  </div>
+
+  <div class="art">
+    <div class="window">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="code"><b></b><b></b><b></b><b></b><b></b></div>
+      <div class="flags"><span>RU</span><span>EN</span><span>DE</span></div>
+    </div>
+  </div>
+</div>

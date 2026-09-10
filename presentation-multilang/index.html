@@ -1,0 +1,957 @@
+<title>Мультиязычный проект</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --lime:#b7e61e;
+    --white:#ffffff;
+    --page:#ece9fb;
+    --page-2:#f6f4fd;
+    --ink:#241a3d;
+    --ink-soft:#5b5175;
+    --head:#6d28d9;
+    --card:#ffffff;
+    --card-line:#ddd6f5;
+    --code-bg:#1e1636;
+    --code-fg:#e9e4ff;
+    --code-line:#3a2d63;
+    --code-com:#9488bd;
+    --ok:#3f8f2e;
+    --no:#c0392b;
+    --lav-panel:#7c5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#140c2b;
+    font-family:Montserrat,system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+
+  /* ---------- stage ---------- */
+  .deck{
+    position:relative;width:1280px;height:720px;flex:none;
+    transform-origin:center center;
+    border-radius:12px;overflow:hidden;
+    box-shadow:0 40px 100px -25px rgba(0,0,0,.7);
+    background:#2c1358;
+  }
+
+  .slide{
+    position:absolute;inset:0;
+    padding:64px 92px;
+    display:flex;flex-direction:column;
+    opacity:0;visibility:hidden;
+    transition:opacity .34s ease;
+  }
+  .slide.is-active{opacity:1;visibility:visible}
+
+  /* dark vs light */
+  .slide.dark{
+    color:var(--white);
+    background:
+      radial-gradient(120% 90% at 84% 16%, #4d2c8c 0%, rgba(77,44,140,0) 55%),
+      radial-gradient(90% 80% at 10% 94%, #3a1d70 0%, rgba(58,29,112,0) 60%),
+      linear-gradient(160deg,#3a1d70 0%,#2c1358 100%);
+  }
+  .slide.dark::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .slide.light{background:linear-gradient(180deg,var(--page-2) 0%,var(--page) 100%);color:var(--ink)}
+
+  /* ---------- logo ---------- */
+  .logo{position:absolute;top:40px;left:92px;font-weight:800;font-size:26px;letter-spacing:-.5px;z-index:5}
+  .logo .a{color:var(--lime)}
+  .slide.dark .logo .b{color:var(--white)}
+  .slide.light .logo .b{color:var(--ink)}
+
+  /* ---------- typography ---------- */
+  .eyebrow{
+    font-weight:700;font-size:15px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--lime);margin-bottom:22px;
+  }
+  .slide.light .eyebrow{color:#7c3aed}
+  h1{font-weight:800;font-size:74px;line-height:1.03;letter-spacing:-1.5px;max-width:15ch;text-wrap:balance}
+  h2{font-weight:800;font-size:42px;line-height:1.12;letter-spacing:-.8px;margin-bottom:22px;max-width:24ch;text-wrap:balance}
+  .slide.light h2{color:var(--head)}
+  .lead{font-weight:500;font-size:25px;line-height:1.5;max-width:30em;color:inherit}
+  .slide.dark .lead{color:#e5dcff}
+  .slide.light .lead{color:var(--ink)}
+  .muted{color:var(--ink-soft);font-size:19px;line-height:1.5;font-weight:500;max-width:34em;margin-top:18px}
+  .slide.dark .muted{color:#c3b6e6}
+
+  .body{display:flex;flex-direction:column;gap:20px;flex:1;min-height:0;justify-content:center}
+  .section .body,.title .body{justify-content:center}
+
+  ul.list{list-style:none;display:flex;flex-direction:column;gap:13px;max-width:32em}
+  ul.list li{position:relative;padding-left:30px;font-size:22px;line-height:1.45;font-weight:500}
+  ul.list li::before{content:"";position:absolute;left:4px;top:11px;width:9px;height:9px;border-radius:2px;background:var(--lime)}
+  ul.list.check li::before{content:"✓";left:0;top:0;width:auto;height:auto;background:none;color:var(--ok);font-weight:800;font-size:19px}
+
+  /* ---------- section divider ---------- */
+  .section .num{position:absolute;right:70px;top:20px;font-size:300px;font-weight:800;line-height:1;color:rgba(183,230,30,.13)}
+  .section h1{font-size:60px;max-width:20ch}
+
+  /* ---------- cards / grid ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .card{background:var(--card);border:2px solid var(--card-line);border-radius:16px;padding:22px 24px}
+  .slide.dark .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16)}
+  .card h3{font-size:19px;font-weight:800;margin-bottom:12px;letter-spacing:.3px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .card li{position:relative;padding-left:26px;font-size:17px;line-height:1.4;font-weight:500}
+  .card li.p::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+  .card li.m::before{content:"✕";position:absolute;left:0;color:var(--no);font-weight:800}
+
+  .pill{display:inline-block;padding:5px 13px;border-radius:999px;background:var(--lime);color:#241a3d;font-weight:700;font-size:14px;letter-spacing:.5px}
+
+  /* ---------- matrix table ---------- */
+  table.matrix{border-collapse:collapse;font-size:20px;margin-top:6px}
+  table.matrix th,table.matrix td{border:2px solid var(--card-line);padding:14px 22px;text-align:center;font-weight:600}
+  table.matrix thead th{background:#7c3aed;color:#fff;border-color:#7c3aed}
+  table.matrix tbody th{background:var(--card);text-align:left;color:var(--head)}
+  table.matrix td{background:var(--card);font-family:"JetBrains Mono",monospace;font-size:15px;color:var(--ink-soft)}
+
+  /* ---------- code ---------- */
+  pre.code{
+    background:var(--code-bg);color:var(--code-fg);
+    border:2px solid var(--code-line);border-radius:12px;
+    padding:16px 20px 18px;overflow:auto;max-width:100%;
+    font-family:"JetBrains Mono",monospace;font-size:16.5px;line-height:1.62;
+  }
+  pre.code .bar{display:block;height:11px;margin:-2px 0 12px}
+  pre.code .bar::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff5f57;box-shadow:17px 0 #febc2e,34px 0 #28c840}
+  pre.code code{white-space:pre;display:block}
+  pre.code .c{color:var(--code-com);font-style:italic}
+  pre.code .s{color:var(--lime)}
+  .codecap{font-size:15px;color:var(--ink-soft);font-weight:600;margin-top:10px}
+  .slide.dark .codecap{color:#c3b6e6}
+
+  .tree{
+    background:var(--code-bg);color:#d9d1ff;border-radius:12px;border:2px solid var(--code-line);
+    padding:18px 22px;font-family:"JetBrains Mono",monospace;font-size:16px;line-height:1.7;white-space:pre;overflow:auto
+  }
+  .tree b{color:var(--lime);font-weight:500}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .two.wide-left{grid-template-columns:1.1fr .9fr}
+
+  /* ---------- title art ---------- */
+  .art{position:absolute;right:78px;bottom:96px;width:340px;z-index:2}
+  .window{background:var(--lav-panel);border-radius:16px;padding:15px 15px 22px;box-shadow:0 24px 60px -14px rgba(0,0,0,.55)}
+  .window .wb{display:flex;gap:7px;margin-bottom:13px}
+  .window .wb span{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .window .cg{display:grid;gap:8px}
+  .window .cg i{height:7px;border-radius:4px;background:rgba(255,255,255,.55);display:block}
+  .window .cg i:nth-child(1){width:72%}
+  .window .cg i:nth-child(2){width:50%}
+  .window .cg i:nth-child(3){width:84%}
+  .window .cg i:nth-child(4){width:42%}
+  .window .cg i:nth-child(5){width:64%}
+  .flags{position:absolute;left:-18px;bottom:30px;display:grid;gap:9px}
+  .flags span{width:46px;height:31px;border-radius:6px;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;background:#241447;color:var(--lime);border:2px solid rgba(255,255,255,.2)}
+
+  /* ---------- comets ---------- */
+  .comet{position:absolute;width:9px;height:9px;border-radius:50%;background:#bca9f0;z-index:1}
+  .comet::before{content:"";position:absolute;right:5px;top:3px;width:120px;height:2px;background:linear-gradient(90deg,rgba(188,169,240,0),#bca9f0);transform:rotate(33deg);transform-origin:right center}
+  .comet.c1{top:60px;right:70px}
+  .comet.c2{bottom:90px;left:70px;transform:scale(.8)}
+  .comet.c3{top:180px;right:280px;transform:scale(.6)}
+
+  /* ---------- hud ---------- */
+  .hud{position:absolute;left:0;right:0;bottom:24px;display:flex;align-items:center;justify-content:space-between;padding:0 92px;font-size:13px;font-weight:600;z-index:6;color:rgba(255,255,255,.65)}
+  .deck.on-light .hud{color:rgba(36,26,61,.55)}
+  .hud .count{font-variant-numeric:tabular-nums;letter-spacing:1px}
+  .progress{position:absolute;left:0;bottom:0;height:4px;width:100%;background:rgba(255,255,255,.12);z-index:6}
+  .deck.on-light .progress{background:rgba(36,26,61,.1)}
+  .progress i{display:block;height:100%;width:0;background:var(--lime);transition:width .34s ease}
+
+  @media (prefers-reduced-motion:reduce){
+    .slide,.progress i{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+
+<div class="deck" id="deck">
+  <div class="progress"><i id="pbar"></i></div>
+  <div class="hud"><span class="hint">← → листать · F — весь экран</span><span class="count"><b id="cur">1</b> / <b id="total">1</b></span></div>
+
+  <!-- 1 · TITLE -->
+  <section class="slide dark title">
+    <div class="body">
+      <div class="eyebrow">Модуль 4 · Тема 31 · Web-разработка</div>
+      <h1>Мультиязычный проект</h1>
+      <p class="lead">Как разложить страницы на трёх языках и связать их ссылками. Только HTML, CSS и JavaScript — без единой библиотеки.</p>
+    </div>
+    <div class="art">
+      <div class="window">
+        <div class="wb"><span></span><span></span><span></span></div>
+        <div class="cg"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="flags"><span>RU</span><span>EN</span><span>DE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Зачем это нужно</div>
+      <h2>Представь ситуацию</h2>
+      <p class="lead">Ты собрал сайт-портфолио. Им заинтересовались заказчики из Германии и англоязычные клиенты. Теперь <b>каждая страница</b> нужна на трёх языках: русском, английском, немецком.</p>
+      <p class="muted">Google Translate — это костыль: кривой перевод, ломает вёрстку, не индексируется. Сделаем по-нормальному.</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Задача</div>
+      <h2>3 страницы × 3 языка = 9 файлов</h2>
+      <table class="matrix">
+        <thead><tr><th></th><th>RU</th><th>EN</th><th>DE</th></tr></thead>
+        <tbody>
+          <tr><th>Главная</th><td>index.html</td><td>index.html</td><td>index.html</td></tr>
+          <tr><th>Реквизиты</th><td>contacts.html</td><td>contacts.html</td><td>contacts.html</td></tr>
+          <tr><th>Инфо</th><td>about.html</td><td>about.html</td><td>about.html</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">Обрати внимание: имена файлов в каждом столбце одинаковые. Дальше поймёшь, почему это важно.</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Главная мысль</div>
+      <h2>«Страница на трёх языках» — это три файла</h2>
+      <p class="lead">Не один умный файл с переключателем внутри. А <b>три отдельных HTML-файла</b>: одинаковый макет, разный текст. Браузер в один момент показывает только один из них.</p>
+      <p class="muted">Так делают почти все сайты компаний. Это просто, надёжно и понятно поисковикам.</p>
+    </div>
+  </section>
+
+  <!-- 5 · SECTION 1 -->
+  <section class="slide dark section">
+    <div class="num">1</div>
+    <div class="body"><div class="eyebrow">Часть 1</div><h1>Куда класть файлы</h1></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Способ 1. Язык в имени файла</h2>
+      <div class="two wide-left">
+        <div class="tree">portfolio/
+  <b>index.html</b>          главная, RU
+  <b>index.en.html</b>       главная, EN
+  <b>index.de.html</b>       главная, DE
+  contacts.html
+  contacts.en.html
+  contacts.de.html
+  about.html
+  about.en.html
+  about.de.html</div>
+        <div class="card"><ul>
+          <li class="p">Все файлы на виду</li>
+          <li class="m">Свалка из 9+ файлов в одной папке</li>
+          <li class="m">Разные имена у одной страницы</li>
+          <li class="m">Переключать языки — неудобно</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Способ 2. Папка на каждый язык</h2>
+      <div class="two wide-left">
+        <div class="tree">portfolio/
+  <b>ru/</b>
+    index.html
+    contacts.html
+    about.html
+  <b>en/</b>
+    index.html
+    contacts.html
+    about.html
+  <b>de/</b>
+    index.html · contacts.html · about.html
+  assets/
+  index.html        выбор языка</div>
+        <div class="card"><ul>
+          <li class="p">Порядок: одна папка — один язык</li>
+          <li class="p">Одинаковые имена файлов</li>
+          <li class="p">Переключатель языков = смена папки</li>
+          <li class="p">Так делает большинство сайтов</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Способ 3. Папка на каждую страницу</h2>
+      <div class="two wide-left">
+        <div class="tree">portfolio/
+  index/
+    ru.html
+    en.html
+    de.html
+  contacts/
+    ru.html
+    en.html
+    de.html
+  about/
+    ru.html · en.html · de.html</div>
+        <div class="card"><ul>
+          <li class="m">Языки одной страницы рядом, но…</li>
+          <li class="m">Меню приходится собирать из разных папок</li>
+          <li class="m">Пути получаются длиннее и путанее</li>
+          <li class="m">Для 3 страниц — перебор</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Выбор</div>
+      <h2>Берём Способ 2 <span class="pill">папки по языкам</span></h2>
+      <ul class="list">
+        <li>Внутри одного языка все ссылки простые: <code>contacts.html</code></li>
+        <li>Переключатель языков меняет всего один кусок пути: <code>/ru/ → /de/</code></li>
+        <li>Легко добавить 4-й язык — просто копируешь папку</li>
+        <li>Понятно поисковикам и понятно тебе через полгода</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Наше дерево целиком</h2>
+      <div class="tree">portfolio/
+  <b>index.html</b>              выбор языка (редирект)
+  <b>ru/  en/  de/</b>           по папке на язык
+    index.html            главная
+    contacts.html         реквизиты
+    about.html            инфо
+  <b>partials/</b>
+    header.html           общая шапка
+    footer.html           общий футер
+  <b>assets/</b>
+    styles.css            один стиль на весь сайт
+    script.js            один скрипт
+    i18n.js              словарь надписей
+    img/</div>
+    </div>
+  </section>
+
+  <!-- 11 · SECTION 2 -->
+  <section class="slide dark section">
+    <div class="num">2</div>
+    <div class="body"><div class="eyebrow">Часть 2</div><h1>Правила, чтобы не запутаться</h1></div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Правило 1</div>
+      <h2>Одинаковые имена файлов во всех языках</h2>
+      <div class="two">
+        <div class="card"><h3 style="color:var(--ok)">Так</h3><ul>
+          <li class="p">ru/contacts.html</li><li class="p">en/contacts.html</li><li class="p">de/contacts.html</li>
+        </ul></div>
+        <div class="card"><h3 style="color:var(--no)">Не так</h3><ul>
+          <li class="m">ru/rekvizity.html</li><li class="m">en/details.html</li><li class="m">de/kontakt.html</li>
+        </ul></div>
+      </div>
+      <p class="muted">Одинаковые имена = переключатель языков сможет собрать ссылку сам, по формуле.</p>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Правила 2 и 3</div>
+      <h2>Русский — главный. Структура — одинаковая</h2>
+      <ul class="list">
+        <li><b>Правило 2.</b> Сначала полностью делаешь <code>/ru/</code>. Потом копируешь папку в <code>/en/</code> и <code>/de/</code> и переводишь только текст.</li>
+        <li><b>Правило 3.</b> Что есть в <code>/ru/</code> — то есть и в <code>/en/</code>, и в <code>/de/</code>. Те же файлы, те же подпапки, та же вложенность.</li>
+      </ul>
+      <p class="muted">Три папки-близнеца. Отличается только язык текста и атрибут <code>lang</code>.</p>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Проверка</div>
+      <h2>Как убедиться, что разложил верно</h2>
+      <ul class="list check">
+        <li>В <code>ru</code>, <code>en</code>, <code>de</code> — одинаковый список файлов</li>
+        <li>Имена файлов совпадают буква в букву</li>
+        <li>Открыл любую страницу — меню ведёт на соседние страницы того же языка</li>
+        <li>Ни одной ссылки вида <code>C:\Users\...</code> или <code>../../../</code> на три уровня</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 15 · SECTION 3 -->
+  <section class="slide dark section">
+    <div class="num">3</div>
+    <div class="body"><div class="eyebrow">Часть 3</div><h1>Ссылки — самое важное</h1></div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Аналогия</div>
+      <h2>Что такое путь к файлу</h2>
+      <p class="lead">Путь — это адрес файла, как адрес дома. Есть два способа объяснить, куда идти:</p>
+      <ul class="list">
+        <li><b>От себя</b> — «сосед справа», «этажом выше». Это <b>относительный</b> путь.</li>
+        <li><b>Полный адрес</b> — «город, улица Ленина, дом 5». Это <b>абсолютный</b> путь.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Относительный путь</h2>
+      <p class="lead">Считается <b>от файла, где ты пишешь ссылку</b>.</p>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- мы внутри ru/index.html --&gt;
+
+&lt;a href="contacts.html"&gt;Реквизиты&lt;/a&gt;        &lt;!-- сосед в той же папке --&gt;
+&lt;a href="about.html"&gt;Инфо&lt;/a&gt;
+
+&lt;img src="../assets/img/logo.svg"&gt;          &lt;!-- .. = папка выше --&gt;
+&lt;a href="../en/index.html"&gt;English&lt;/a&gt;      &lt;!-- выйти и зайти в en/ --&gt;</code></pre>
+      <p class="codecap">Минус: перенёс файл в другую папку — все <code>../</code> сломались.</p>
+    </div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Абсолютный путь от корня</h2>
+      <p class="lead">Начинается со <b>слэша</b> <code>/</code>. Это «от корня сайта», всегда одинаково — из любого файла.</p>
+      <pre class="code"><span class="bar"></span><code>&lt;a href="/ru/contacts.html"&gt;Реквизиты&lt;/a&gt;
+&lt;a href="/en/index.html"&gt;English&lt;/a&gt;
+&lt;img src="/assets/img/logo.svg"&gt;
+
+&lt;!-- работает одинаково из ru/index.html и из de/about.html --&gt;</code></pre>
+      <p class="codecap">Корень — это папка <code>portfolio/</code>. <code>/</code> = «начни отсюда».</p>
+    </div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Правило выбора</div>
+      <h2>Что где использовать</h2>
+      <div class="two">
+        <div class="card"><h3>Путь от корня <code>/</code></h3><ul>
+          <li class="p">Меню сайта</li>
+          <li class="p">Переключатель языков</li>
+          <li class="p">Общие <code>styles.css</code>, <code>script.js</code></li>
+        </ul></div>
+        <div class="card"><h3>Относительный путь</h3><ul>
+          <li class="p">Картинка рядом со страницей</li>
+          <li class="p">Быстрый прототип на коленке</li>
+        </ul></div>
+      </div>
+      <p class="muted">Сомневаешься — бери путь от корня. С ним ничего не ломается при переносе.</p>
+    </div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Тег <code>&lt;base&gt;</code> — чинит ссылки одной строкой</h2>
+      <p class="lead">Ставишь в <code>&lt;head&gt;</code> — и все относительные ссылки на странице считаются от указанной папки.</p>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- в &lt;head&gt; каждого файла папки ru/ --&gt;
+&lt;base href="/ru/"&gt;
+
+&lt;!-- теперь можно писать коротко: --&gt;
+&lt;a href="contacts.html"&gt;Реквизиты&lt;/a&gt;   &lt;!-- = /ru/contacts.html --&gt;</code></pre>
+      <p class="codecap">Удобно, но помни: <code>&lt;base&gt;</code> влияет на ВСЕ ссылки страницы, включая якоря <code>#</code>.</p>
+    </div>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Частая беда</div>
+      <h2>Почему сайт ломается при двойном клике</h2>
+      <p class="lead">Открыл файл двойным кликом — в адресе <code>file:///C:/Users/...</code>. Это не сайт, у него <b>нет корня</b>.</p>
+      <ul class="list">
+        <li>Пути от корня <code>/assets/styles.css</code> — не работают</li>
+        <li><code>fetch()</code> общей шапки — блокируется браузером</li>
+        <li>Переключатель языков ведёт «в никуда»</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 22 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Лечение</div>
+      <h2>Запусти локальный сервер</h2>
+      <pre class="code"><span class="bar"></span><code># в терминале, из папки проекта
+cd portfolio
+python3 -m http.server 8000
+
+# теперь открой в браузере:
+# http://localhost:8000/</code></pre>
+      <p class="lead" style="font-size:21px;margin-top:14px">Или в VS Code: расширение <b>Live Server</b> → кнопка <b>«Go Live»</b> внизу справа. Сайт откроется на <code>http://127.0.0.1:5500</code> и будет сам перезагружаться при сохранении.</p>
+    </div>
+  </section>
+
+  <!-- 23 · SECTION 4 -->
+  <section class="slide dark section">
+    <div class="num">4</div>
+    <div class="body"><div class="eyebrow">Часть 4</div><h1>Меню внутри одного языка</h1></div>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Шапка с меню</h2>
+      <p class="lead">Одинаковый блок на всех трёх страницах папки <code>/ru/</code>. Ссылки — от корня.</p>
+      <pre class="code"><span class="bar"></span><code>&lt;nav class="menu"&gt;
+  &lt;a href="/ru/index.html"&gt;Главная&lt;/a&gt;
+  &lt;a href="/ru/contacts.html"&gt;Реквизиты&lt;/a&gt;
+  &lt;a href="/ru/about.html"&gt;Инфо&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+      <p class="codecap">В <code>/en/</code> то же самое, но с <code>/en/...</code>. В <code>/de/</code> — с <code>/de/...</code>.</p>
+    </div>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Подсветить текущую страницу</h2>
+      <pre class="code"><span class="bar"></span><code>// script.js — сравниваем адрес страницы с href ссылки
+const here = location.pathname;                  // "/ru/contacts.html"
+
+document.querySelectorAll('.menu a').forEach(link =&gt; {
+  if (link.getAttribute('href') === here) {
+    link.classList.add('active');
+  }
+});</code></pre>
+      <pre class="code"><span class="bar"></span><code>.menu a.active { color: #6d28d9; border-bottom: 2px solid #6d28d9; }</code></pre>
+    </div>
+  </section>
+
+  <!-- 26 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Одинаковая шапка на всех страницах</h2>
+      <div class="two">
+        <div class="card"><h3>Вариант А — копипаст</h3><ul>
+          <li class="p">Просто: вставил один и тот же <code>&lt;nav&gt;</code></li>
+          <li class="m">Поменял пункт — правишь в 9 файлах</li>
+        </ul></div>
+        <div class="card"><h3>Вариант Б — грузить через JS</h3><ul>
+          <li class="p">Шапка в одном файле <code>partials/header.html</code></li>
+          <li class="p">Поправил один раз — везде обновилось</li>
+        </ul></div>
+      </div>
+      <p class="muted">Вариант Б разберём в Части 8. Для старта хватит и копипаста.</p>
+    </div>
+  </section>
+
+  <!-- 27 · SECTION 5 -->
+  <section class="slide dark section">
+    <div class="num">5</div>
+    <div class="body"><div class="eyebrow">Часть 5</div><h1>Переключатель языков</h1></div>
+  </section>
+
+  <!-- 28 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Задача</div>
+      <h2>Кнопки RU / EN / DE ведут на ЭТУ ЖЕ страницу</h2>
+      <p class="lead">Ты на <code>/ru/contacts.html</code>, жмёшь <b>DE</b> — попадаешь на <code>/de/contacts.html</code>. Не на главную немецкую, а на немецкие <b>реквизиты</b>.</p>
+      <p class="muted">Бесит, когда сайт кидает на главную и заставляет искать нужную страницу заново.</p>
+    </div>
+  </section>
+
+  <!-- 29 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Секрет</div>
+      <h2>Меняем только кусок с языком</h2>
+      <div class="tree">/ru/contacts.html
+     ↑↑
+     меняем это на  en  или  de
+
+/de/contacts.html   ← та же страница, другой язык</div>
+      <p class="muted">Работает только потому, что имена файлов одинаковые (Правило 1). Иначе формула не соберётся.</p>
+    </div>
+  </section>
+
+  <!-- 30 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Помечаем страницу и собираем ссылку</h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- на contacts.html любого языка --&gt;
+&lt;body data-page="contacts"&gt;
+
+&lt;nav class="langs"&gt;
+  &lt;a id="to-ru"&gt;RU&lt;/a&gt; &lt;a id="to-en"&gt;EN&lt;/a&gt; &lt;a id="to-de"&gt;DE&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+      <pre class="code"><span class="bar"></span><code>const page = document.body.dataset.page;          // "contacts"
+
+['ru', 'en', 'de'].forEach(lang =&gt; {
+  document.getElementById('to-' + lang).href =
+    '/' + lang + '/' + page + '.html';             // "/de/contacts.html"
+});</code></pre>
+    </div>
+  </section>
+
+  <!-- 31 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Запоминаем выбор языка</h2>
+      <pre class="code"><span class="bar"></span><code>// когда кликнули по языку — запомнили
+localStorage.setItem('lang', 'de');</code></pre>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- portfolio/index.html — только выбор языка --&gt;
+&lt;script&gt;
+  const saved = localStorage.getItem('lang');
+  const guess = navigator.language.slice(0, 2);     // "ru" / "en" / "de"
+  const known = ['ru', 'en', 'de'];
+  const lang  = saved || (known.includes(guess) ? guess : 'en');
+  location.replace('/' + lang + '/index.html');
+&lt;/script&gt;</code></pre>
+    </div>
+  </section>
+
+  <!-- 32 · SECTION 6 -->
+  <section class="slide dark section">
+    <div class="num">6</div>
+    <div class="body"><div class="eyebrow">Часть 6</div><h1>Кнопка → другая страница → сразу к нужному блоку</h1></div>
+  </section>
+
+  <!-- 33 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Задача</div>
+      <h2>Открыть страницу и сразу промотать к блоку</h2>
+      <p class="lead">На главной есть кнопка <b>«Банковские данные»</b>. По клику открывается <code>contacts.html</code> — и страницу <b>сразу</b> прокручивает к разделу с реквизитами банка. Не к началу страницы.</p>
+    </div>
+  </section>
+
+  <!-- 34 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Как устроен якорь</h2>
+      <p class="lead">Два кусочка: <b>id</b> на блоке и <b>#id</b> в ссылке.</p>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- 1. на contacts.html вешаем id на нужный блок --&gt;
+&lt;section id="bank"&gt;
+  &lt;h2&gt;Банковские данные&lt;/h2&gt;
+  ...
+&lt;/section&gt;
+
+&lt;!-- 2. на index.html ссылка с решёткой --&gt;
+&lt;a href="/ru/contacts.html#bank"&gt;Банковские данные&lt;/a&gt;</code></pre>
+      <p class="codecap">Браузер откроет <code>contacts.html</code>, найдёт <code>id="bank"</code> и сам прокрутит к нему.</p>
+    </div>
+  </section>
+
+  <!-- 35 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Кнопка или ссылка?</h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- ХОРОШО: ссылка, стилизованная под кнопку --&gt;
+&lt;a class="btn" href="/ru/contacts.html#bank"&gt;Реквизиты&lt;/a&gt;
+
+&lt;!-- РАБОТАЕТ, но хуже: настоящая кнопка + JS --&gt;
+&lt;button onclick="location.href='/ru/contacts.html#bank'"&gt;
+  Реквизиты
+&lt;/button&gt;</code></pre>
+      <ul class="list">
+        <li><code>&lt;a&gt;</code> работает без JS, открывается в новой вкладке по правому клику, понятен читалкам</li>
+        <li><code>&lt;button&gt;</code> — для действий (отправить форму), а не для перехода на страницу</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 36 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Тонкости: плавно и под шапку</h2>
+      <pre class="code"><span class="bar"></span><code>html {
+  scroll-behavior: smooth;        /* плавная прокрутка к якорю */
+}
+
+#bank {
+  scroll-margin-top: 90px;        /* не заезжать под фиксированную шапку */
+}
+
+#bank:target {
+  background: #f4ffcc;            /* подсветить блок, к которому пришли */
+  transition: background .4s ease;
+}</code></pre>
+      <p class="codecap"><code>:target</code> — это блок, чей id стоит сейчас в адресе после <code>#</code>.</p>
+    </div>
+  </section>
+
+  <!-- 37 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Тонкости: когда блок приходит через fetch</h2>
+      <p class="lead">Если шапку/контент вставляешь скриптом, браузер уже промотал страницу — и промахнулся мимо ещё не существующего блока. Догоняем вручную:</p>
+      <pre class="code"><span class="bar"></span><code>window.addEventListener('load', () =&gt; {
+  if (location.hash) {
+    const el = document.querySelector(location.hash);   // "#bank"
+    el?.scrollIntoView({ behavior: 'smooth' });
+  }
+});</code></pre>
+      <pre class="code"><span class="bar"></span><code>// и переносим якорь на другой язык той же страницы
+link.href = '/' + lang + '/' + page + '.html' + location.hash;</code></pre>
+    </div>
+  </section>
+
+  <!-- 38 · SECTION 7 -->
+  <section class="slide dark section">
+    <div class="num">7</div>
+    <div class="body"><div class="eyebrow">Часть 7</div><h1>Правильный HTML и поисковики</h1></div>
+  </section>
+
+  <!-- 39 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Атрибут <code>lang</code> в теге <code>&lt;html&gt;</code></h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- portfolio/de/contacts.html --&gt;
+&lt;html lang="de"&gt;
+
+&lt;!-- ru/... → lang="ru"      en/... → lang="en" --&gt;</code></pre>
+      <ul class="list">
+        <li>Браузер правильно предложит перевод</li>
+        <li>Читалка для незрячих выберет немецкий голос</li>
+        <li>Google поймёт язык страницы</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 40 -->
+  <section class="slide light">
+    <div class="body">
+      <h2><code>hreflang</code> и <code>canonical</code></h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- в &lt;head&gt; КАЖДОЙ версии страницы contacts --&gt;
+&lt;link rel="alternate" hreflang="ru" href="https://site.com/ru/contacts.html"&gt;
+&lt;link rel="alternate" hreflang="en" href="https://site.com/en/contacts.html"&gt;
+&lt;link rel="alternate" hreflang="de" href="https://site.com/de/contacts.html"&gt;
+&lt;link rel="alternate" hreflang="x-default" href="https://site.com/en/contacts.html"&gt;
+
+&lt;!-- на немецкой странице: --&gt;
+&lt;link rel="canonical" href="https://site.com/de/contacts.html"&gt;</code></pre>
+      <p class="codecap"><b>hreflang</b> — список всех языковых версий. <b>canonical</b> — «эта версия оригинал, не считай дублем».</p>
+    </div>
+  </section>
+
+  <!-- 41 · SECTION 8 -->
+  <section class="slide dark section">
+    <div class="num">8</div>
+    <div class="body"><div class="eyebrow">Часть 8</div><h1>Меньше копипаста — без библиотек</h1></div>
+  </section>
+
+  <!-- 42 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Один стиль и один скрипт на весь сайт</h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- в &lt;head&gt; любой из 9 страниц, путь от корня --&gt;
+&lt;link rel="stylesheet" href="/assets/styles.css"&gt;
+&lt;script src="/assets/script.js" defer&gt;&lt;/script&gt;</code></pre>
+      <p class="lead" style="font-size:22px;margin-top:12px">Поправил цвет кнопки в <code>styles.css</code> — изменилось на всех девяти страницах сразу. Не надо трогать каждый файл.</p>
+    </div>
+  </section>
+
+  <!-- 43 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Шапка и футер — один раз через fetch</h2>
+      <pre class="code"><span class="bar"></span><code>&lt;!-- на странице только пустые места --&gt;
+&lt;div id="header"&gt;&lt;/div&gt;
+  ...
+&lt;div id="footer"&gt;&lt;/div&gt;</code></pre>
+      <pre class="code"><span class="bar"></span><code>// script.js
+async function include(id, url) {
+  const res = await fetch(url);
+  document.getElementById(id).innerHTML = await res.text();
+}
+include('header', '/partials/header.html');
+include('footer', '/partials/footer.html');</code></pre>
+      <p class="codecap">Только через localhost / настоящий сайт. И якорь <code>#</code> после этого лови вручную (слайд 37).</p>
+    </div>
+  </section>
+
+  <!-- 44 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Повторяющиеся надписи — в словарь</h2>
+      <pre class="code"><span class="bar"></span><code>// assets/i18n.js
+const T = {
+  ru: { hello: 'Привет', contacts: 'Реквизиты' },
+  en: { hello: 'Hello',  contacts: 'Details'   },
+  de: { hello: 'Hallo',  contacts: 'Angaben'   },
+};
+
+const lang = document.documentElement.lang;         // "de"
+document.querySelectorAll('[data-i18n]').forEach(el =&gt; {
+  el.textContent = T[lang][el.dataset.i18n];
+});</code></pre>
+      <p class="codecap">По желанию. Удобно, когда одинаковых надписей много (меню, кнопки, футер).</p>
+    </div>
+  </section>
+
+  <!-- 45 · SECTION 9 -->
+  <section class="slide dark section">
+    <div class="num">9</div>
+    <div class="body"><div class="eyebrow">Итог</div><h1>Собираем всё вместе</h1></div>
+  </section>
+
+  <!-- 46 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Полная схема проекта</h2>
+      <div class="tree">portfolio/
+  index.html            → определяет язык, редиректит в /ru|/en|/de
+  ru/ · en/ · de/
+    index.html          &lt;html lang="…"&gt; + data-page="index"
+    contacts.html       data-page="contacts", внутри &lt;section id="bank"&gt;
+    about.html          data-page="about"
+  partials/header.html · footer.html
+  assets/styles.css · script.js · i18n.js · img/</div>
+    </div>
+  </section>
+
+  <!-- 47 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Чек-лист перед публикацией</div>
+      <h2>Проверь по списку</h2>
+      <ul class="list check">
+        <li>Открываешь через <code>localhost</code>, а не двойным кликом</li>
+        <li>В <code>ru / en / de</code> — одинаковые имена файлов</li>
+        <li>В каждом файле правильный <code>&lt;html lang="…"&gt;</code></li>
+        <li>Меню и переключатель языков — пути от корня <code>/ru/…</code></li>
+        <li>Переключатель ведёт на ту же страницу (<code>data-page</code>)</li>
+        <li>Якоря <code>#bank</code> работают и переносятся между языками</li>
+        <li><code>hreflang</code> и <code>canonical</code> проставлены</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 48 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Домашнее задание</div>
+      <h2>Сделай свой сайт на трёх языках</h2>
+      <ul class="list">
+        <li>Папки <code>/ru/ /en/ /de/</code>, по 3 страницы в каждой</li>
+        <li>Корневой <code>index.html</code> определяет язык и редиректит</li>
+        <li>Общее меню + переключатель RU/EN/DE на текущую страницу</li>
+        <li>На главной — кнопка «Реквизиты», открывает <code>contacts.html#bank</code> с плавной прокруткой</li>
+        <li>Проверь по чек-листу, выложи на GitHub Pages</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 49 · FINAL -->
+  <section class="slide dark section">
+    <div class="body"><div class="eyebrow">Тема 31 завершена</div><h1>Спасибо!</h1><p class="lead" style="margin-top:18px">Вопросы — в чат. Дальше: адаптив и деплой.</p></div>
+  </section>
+
+</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = [...document.querySelectorAll('.slide')];
+  const pbar = document.getElementById('pbar');
+  const curEl = document.getElementById('cur');
+  document.getElementById('total').textContent = slides.length;
+
+  /* --- code highlight --- */
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const hl = raw => esc(raw)
+    .replace(/(&lt;!--[\s\S]*?--&gt;)/g,'\u0001c\u0001$1\u0001/\u0001')
+    .replace(/(\/\/[^\n]*)/g,'\u0001c\u0001$1\u0001/\u0001')
+    .replace(/^(\s*#[^\n]*)/gm,'\u0001c\u0001$1\u0001/\u0001')
+    .replace(/(&quot;[^&\n]*?&quot;|&#39;[^&\n]*?&#39;)/g,'\u0001s\u0001$1\u0001/\u0001')
+    .replace(/\u0001c\u0001/g,'<span class="c">')
+    .replace(/\u0001s\u0001/g,'<span class="s">')
+    .replace(/\u0001\/\u0001/g,'</span>');
+  document.querySelectorAll('pre.code code').forEach(c => { c.innerHTML = hl(c.textContent); });
+
+  /* --- comets on dark slides --- */
+  document.querySelectorAll('.slide.dark').forEach(s => {
+    s.insertAdjacentHTML('afterbegin','<i class="comet c1"></i><i class="comet c2"></i><i class="comet c3"></i>');
+  });
+
+  /* --- logo on every slide --- */
+  slides.forEach(s => {
+    s.insertAdjacentHTML('afterbegin','<div class="logo"><span class="b">&gt;[</span><span class="a">rts</span><span class="b">&gt;</span></div>');
+  });
+
+  /* --- navigation --- */
+  let idx = 0;
+  function show(n, push){
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s,i) => s.classList.toggle('is-active', i === idx));
+    deck.classList.toggle('on-light', slides[idx].classList.contains('light'));
+    pbar.style.width = ((idx + 1) / slides.length * 100) + '%';
+    curEl.textContent = idx + 1;
+    if (push !== false) history.replaceState(null, '', '#' + (idx + 1));
+  }
+  const next = () => show(idx + 1);
+  const prev = () => show(idx - 1);
+
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+
+  deck.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    const r = deck.getBoundingClientRect();
+    (e.clientX < r.left + r.width / 2 ? prev : next)();
+  });
+
+  let tx = 0;
+  addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive:true});
+  addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+  }, {passive:true});
+
+  addEventListener('hashchange', () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    if (n && n - 1 !== idx) show(n - 1, false);
+  });
+
+  /* --- scale stage to viewport --- */
+  function fit(){
+    const s = Math.min(innerWidth / 1280, innerHeight / 720);
+    deck._scale = s;
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  addEventListener('resize', fit);
+  fit();
+
+  const start = parseInt(location.hash.slice(1), 10);
+  show(start ? start - 1 : 0, false);
+</script>

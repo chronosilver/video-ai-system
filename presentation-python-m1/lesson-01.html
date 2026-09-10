@@ -1,0 +1,552 @@
+<title>Python · Урок 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --lime:#b7e61e;
+    --white:#ffffff;
+    --page:#ece9fb;
+    --page-2:#f6f4fd;
+    --ink:#241a3d;
+    --ink-soft:#5b5175;
+    --head:#6d28d9;
+    --card:#ffffff;
+    --card-line:#ddd6f5;
+    --code-bg:#1e1636;
+    --code-fg:#e9e4ff;
+    --code-line:#3a2d63;
+    --code-com:#9488bd;
+    --ok:#3f8f2e;
+    --no:#c0392b;
+    --lav-panel:#7c5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#140c2b;font-family:Montserrat,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+  .deck{position:relative;width:1280px;height:720px;flex:none;transform-origin:center center;border-radius:12px;overflow:hidden;box-shadow:0 40px 100px -25px rgba(0,0,0,.7);background:#2c1358}
+  .slide{position:absolute;inset:0;padding:64px 92px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .34s ease}
+  .slide.is-active{opacity:1;visibility:visible}
+
+  .slide.dark{color:var(--white);background:
+      radial-gradient(120% 90% at 84% 16%, #4d2c8c 0%, rgba(77,44,140,0) 55%),
+      radial-gradient(90% 80% at 10% 94%, #3a1d70 0%, rgba(58,29,112,0) 60%),
+      linear-gradient(160deg,#3a1d70 0%,#2c1358 100%)}
+  .slide.dark::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .slide.light{background:linear-gradient(180deg,var(--page-2) 0%,var(--page) 100%);color:var(--ink)}
+
+  .logo{position:absolute;top:40px;left:92px;font-weight:800;font-size:26px;letter-spacing:-.5px;z-index:5}
+  .logo .a{color:var(--lime)}
+  .slide.dark .logo .b{color:var(--white)}
+  .slide.light .logo .b{color:var(--ink)}
+
+  .eyebrow{font-weight:700;font-size:15px;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);margin-bottom:22px}
+  .slide.light .eyebrow{color:#7c3aed}
+  h1{font-weight:800;font-size:70px;line-height:1.03;letter-spacing:-1.5px;max-width:16ch;text-wrap:balance}
+  h2{font-weight:800;font-size:42px;line-height:1.12;letter-spacing:-.8px;margin-bottom:22px;max-width:24ch;text-wrap:balance}
+  .slide.light h2{color:var(--head)}
+  .lead{font-weight:500;font-size:25px;line-height:1.5;max-width:30em}
+  .slide.dark .lead{color:#e5dcff}
+  .muted{color:var(--ink-soft);font-size:19px;line-height:1.5;font-weight:500;max-width:34em;margin-top:18px}
+  .slide.dark .muted{color:#c3b6e6}
+
+  .body{display:flex;flex-direction:column;gap:20px;flex:1;min-height:0;justify-content:center}
+
+  ul.list{list-style:none;display:flex;flex-direction:column;gap:13px;max-width:33em}
+  ul.list li{position:relative;padding-left:30px;font-size:22px;line-height:1.45;font-weight:500}
+  ul.list li::before{content:"";position:absolute;left:4px;top:11px;width:9px;height:9px;border-radius:2px;background:var(--lime)}
+  ul.list.check li::before{content:"✓";left:0;top:0;width:auto;height:auto;background:none;color:var(--ok);font-weight:800;font-size:19px}
+  ol.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:14px;max-width:33em}
+  ol.steps li{position:relative;padding-left:44px;font-size:22px;line-height:1.45;font-weight:500;counter-increment:s}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:8px;background:var(--head);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+  .section .num{position:absolute;right:70px;top:20px;font-size:300px;font-weight:800;line-height:1;color:rgba(183,230,30,.13)}
+  .section h1{font-size:58px;max-width:20ch}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .card{background:var(--card);border:2px solid var(--card-line);border-radius:16px;padding:22px 24px}
+  .slide.dark .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16)}
+  .card h3{font-size:19px;font-weight:800;margin-bottom:12px;letter-spacing:.3px}
+  .card p{font-size:17px;line-height:1.45;font-weight:500}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .card li{position:relative;padding-left:26px;font-size:17px;line-height:1.4;font-weight:500}
+  .card li.p::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+  .card li.m::before{content:"✕";position:absolute;left:0;color:var(--no);font-weight:800}
+
+  .pill{display:inline-block;padding:5px 13px;border-radius:999px;background:var(--lime);color:#241a3d;font-weight:700;font-size:14px;letter-spacing:.5px}
+
+  .task{border-left:6px solid var(--lime);background:var(--card);border-radius:0 14px 14px 0;padding:20px 26px;max-width:34em}
+  .slide.dark .task{background:rgba(255,255,255,.06)}
+  .task .tag{display:inline-block;background:var(--lime);color:#241a3d;font-weight:800;font-size:12px;letter-spacing:1.5px;padding:4px 10px;border-radius:6px;margin-bottom:12px}
+  .task p{font-size:22px;line-height:1.45;font-weight:600}
+  .task .hintline{font-size:16px;color:var(--ink-soft);margin-top:10px;font-weight:500}
+
+  pre.code{background:var(--code-bg);color:var(--code-fg);border:2px solid var(--code-line);border-radius:12px;padding:16px 20px 18px;overflow:auto;max-width:100%;font-family:"JetBrains Mono",monospace;font-size:18px;line-height:1.62}
+  pre.code.sm{font-size:15.5px}
+  pre.code .bar{display:block;height:11px;margin:-2px 0 12px}
+  pre.code .bar::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff5f57;box-shadow:17px 0 #febc2e,34px 0 #28c840}
+  pre.code code{white-space:pre;display:block}
+  pre.code .c{color:var(--code-com);font-style:italic}
+  pre.code .s{color:var(--lime)}
+  .codecap{font-size:15px;color:var(--ink-soft);font-weight:600;margin-top:10px}
+  .slide.dark .codecap{color:#c3b6e6}
+  .out{background:#12101f;border:2px dashed var(--code-line);border-radius:12px;padding:14px 18px;font-family:"JetBrains Mono",monospace;font-size:17px;color:#cfc7ea;white-space:pre}
+  .out b{color:var(--lime);font-weight:500}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .two.wide-left{grid-template-columns:1.05fr .95fr}
+
+  .art{position:absolute;right:78px;bottom:96px;width:330px;z-index:2}
+  .window{background:var(--lav-panel);border-radius:16px;padding:15px 15px 22px;box-shadow:0 24px 60px -14px rgba(0,0,0,.55)}
+  .window .wb{display:flex;gap:7px;margin-bottom:13px}
+  .window .wb span{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.5)}
+  .window pre{font-family:"JetBrains Mono",monospace;color:#fff;font-size:14px;line-height:1.7;white-space:pre}
+
+  .comet{position:absolute;width:9px;height:9px;border-radius:50%;background:#bca9f0;z-index:1}
+  .comet::before{content:"";position:absolute;right:5px;top:3px;width:120px;height:2px;background:linear-gradient(90deg,rgba(188,169,240,0),#bca9f0);transform:rotate(33deg);transform-origin:right center}
+  .comet.c1{top:60px;right:70px}
+  .comet.c2{bottom:90px;left:70px;transform:scale(.8)}
+  .comet.c3{top:180px;right:280px;transform:scale(.6)}
+
+  .hud{position:absolute;left:0;right:0;bottom:24px;display:flex;align-items:center;justify-content:space-between;padding:0 92px;font-size:13px;font-weight:600;z-index:6;color:rgba(255,255,255,.65)}
+  .deck.on-light .hud{color:rgba(36,26,61,.55)}
+  .hud .count{font-variant-numeric:tabular-nums;letter-spacing:1px}
+  .progress{position:absolute;left:0;bottom:0;height:4px;width:100%;background:rgba(255,255,255,.12);z-index:6}
+  .deck.on-light .progress{background:rgba(36,26,61,.1)}
+  .progress i{display:block;height:100%;width:0;background:var(--lime);transition:width .34s ease}
+
+  @media (prefers-reduced-motion:reduce){.slide,.progress i{transition:none}}
+</style>
+
+<div class="deck" id="deck">
+  <div class="progress"><i id="pbar"></i></div>
+  <div class="hud"><span class="hint">← → листать · F — весь экран</span><span class="count"><b id="cur">1</b> / <b id="total">1</b></span></div>
+
+  <!-- 1 -->
+  <section class="slide dark title">
+    <div class="body">
+      <div class="eyebrow">Модуль 1 · Python: от первой строки к своей игре</div>
+      <h1>Урок 1. Первая программа</h1>
+      <p class="lead">Сегодня ты напишешь код, который что-то делает. И соберёшь заставку для своей будущей игры.</p>
+    </div>
+    <div class="art">
+      <div class="window">
+        <div class="wb"><span></span><span></span><span></span></div>
+        <pre>&gt;&gt;&gt; print("METEOR HUNT")
+METEOR HUNT
+&gt;&gt;&gt; print("1 - PLAY")
+1 - PLAY
+&gt;&gt;&gt; _</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Цель урока</div>
+      <h2>Что ты умеешь к концу урока</h2>
+      <ul class="list check">
+        <li>Запускать программу на Python</li>
+        <li>Выводить текст на экран командой <code>print</code></li>
+        <li>Читать сообщение об ошибке и чинить код</li>
+        <li>Рисовать символами экран-заставку игры</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">С чего всё начинается</div>
+      <h2>Что такое программа</h2>
+      <p class="lead">Программа — это список команд для компьютера. Как рецепт: шаг за шагом, сверху вниз, без пропусков.</p>
+      <p class="muted">Компьютер тупой, но очень быстрый. Он делает ровно то, что написано — даже если это ерунда.</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Наш язык</div>
+      <h2>Python — на нём говорят с компьютером</h2>
+      <div class="grid2">
+        <div class="card"><h3>Где живёт Python</h3><ul>
+          <li class="p">Игры и боты</li>
+          <li class="p">YouTube, Instagram, Netflix — внутри</li>
+          <li class="p">Наука, роботы, нейросети</li>
+        </ul></div>
+        <div class="card"><h3>Почему с него начинают</h3><ul>
+          <li class="p">Команды похожи на английский</li>
+          <li class="p">Мало «лишних» символов</li>
+          <li class="p">Результат видно сразу</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Инструмент</div>
+      <h2>Где мы пишем код: Thonny</h2>
+      <ul class="list">
+        <li><b>Редактор</b> (сверху) — здесь пишем программу и сохраняем в файл <code>.py</code></li>
+        <li><b>Shell</b> (снизу) — здесь компьютер отвечает и показывает вывод</li>
+        <li>Кнопка <b>Run</b> или клавиша <b>F5</b> — запустить программу</li>
+      </ul>
+      <p class="muted">Файл сохраняем сразу: <code>lesson1.py</code>. Без сохранения запуск не сработает.</p>
+    </div>
+  </section>
+
+  <!-- 6 · SECTION -->
+  <section class="slide dark section">
+    <div class="num">1</div>
+    <div class="body"><div class="eyebrow">Часть 1</div><h1>Команда print</h1></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide light">
+    <div class="body">
+      <h2><code>print</code> — вывести текст на экран</h2>
+      <pre class="code"><span class="bar"></span><code>print("Привет, игрок!")</code></pre>
+      <div class="out">Привет, игрок!</div>
+      <p class="codecap">Пишешь <code>print(...)</code> — Python показывает то, что внутри скобок.</p>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Разбираем по частям</h2>
+      <pre class="code"><span class="bar"></span><code>print("Привет, игрок!")
+ │     │                │
+ │     │                └─ закрывающая кавычка и скобка
+ │     └─ текст в кавычках — то, что выведется
+ └─ имя команды: print</code></pre>
+      <ul class="list">
+        <li>Скобки <code>( )</code> — обязательно</li>
+        <li>Кавычки <code>" "</code> вокруг текста — обязательно</li>
+        <li>Пишем <code>print</code> маленькими латинскими буквами</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="task">
+        <span class="tag">ПРАКТИКА</span>
+        <p>Выведи на экран три строки: <br>твоё имя, любимую игру и фразу «Я учусь на Python».</p>
+        <p class="hintline">Подсказка: нужно три команды <code>print</code>, каждая на своей строке.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Кавычки: двойные и одинарные</h2>
+      <pre class="code"><span class="bar"></span><code>print("Всё хорошо")
+print('Тоже хорошо')
+
+print("Он сказал: 'привет'")     # кавычки разного вида — ок
+print('Это "круто"')</code></pre>
+      <p class="codecap">Главное правило: чем строку открыл — тем и закрывай.</p>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Несколько print — несколько строк</h2>
+      <div class="two">
+        <pre class="code sm"><span class="bar"></span><code>print("METEOR HUNT")
+print("--------------")
+print("1 - Играть")
+print("2 - Выход")</code></pre>
+        <div class="out">METEOR HUNT
+--------------
+1 - Играть
+2 - Выход</div>
+      </div>
+      <p class="codecap">Каждая <code>print</code> начинает новую строку на экране.</p>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="task">
+        <span class="tag">ПРАКТИКА</span>
+        <p>Сделай меню своей игры: название, разделитель из тире, пункты «1 — Играть», «2 — Настройки», «3 — Выход».</p>
+        <p class="hintline">Название игры придумай сам. Разделитель — строка из <code>-</code> или <code>=</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 · SECTION -->
+  <section class="slide dark section">
+    <div class="num">2</div>
+    <div class="body"><div class="eyebrow">Часть 2</div><h1>Ошибки — это нормально</h1></div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Как выглядит ошибка</h2>
+      <pre class="code"><span class="bar"></span><code>print("Привет)</code></pre>
+      <div class="out"><b>SyntaxError</b>: unterminated string literal (line 1)</div>
+      <ul class="list">
+        <li>Python говорит <b>тип</b> ошибки: <code>SyntaxError</code> — «неправильно написано»</li>
+        <li>И <b>номер строки</b>: <code>line 1</code> — где искать</li>
+        <li>Здесь: забыл закрыть кавычку</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Топ-3 ошибки новичка</h2>
+      <div class="grid2">
+        <div class="card"><h3>1. Забыл кавычку или скобку</h3><p><code>print("Привет)</code> <br><code>print("Привет"</code></p></div>
+        <div class="card"><h3>2. Русская буква в команде</h3><p><code>рrint("Привет")</code> — <br>тут <code>р</code> русская. Python не знает такой команды.</p></div>
+      </div>
+      <div class="card" style="margin-top:4px"><h3>3. Большая буква</h3><p><code>Print("Привет")</code> — Python понимает только <code>print</code> с маленькой.</p></div>
+    </div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="task">
+        <span class="tag">ПРАКТИКА · ПОЧИНИ КОД</span>
+        <p>В этих трёх строках по одной ошибке. Найди и исправь:</p>
+        <pre class="code sm"><span class="bar"></span><code>print("Старт игры)
+Print("Уровень 1")
+print «Поехали!»</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 · SECTION -->
+  <section class="slide dark section">
+    <div class="num">3</div>
+    <div class="body"><div class="eyebrow">Часть 3</div><h1>Украшаем вывод</h1></div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Перенос строки: <code>\n</code></h2>
+      <div class="two">
+        <pre class="code sm"><span class="bar"></span><code>print("METEOR HUNT\n1 - Play\n2 - Exit")</code></pre>
+        <div class="out">METEOR HUNT
+1 - Play
+2 - Exit</div>
+      </div>
+      <p class="codecap"><code>\n</code> внутри кавычек = «здесь начни новую строку». Одна <code>print</code> — три строки на экране.</p>
+    </div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Пустая строка для воздуха</h2>
+      <pre class="code"><span class="bar"></span><code>print("METEOR HUNT")
+print()                  # пустая строка — отступ
+print("Нажми ПРОБЕЛ")</code></pre>
+      <p class="codecap"><code>print()</code> без текста просто делает отступ. Полезно, чтобы экран не был «слипшимся».</p>
+    </div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Рисуем символами</h2>
+      <div class="two">
+        <pre class="code sm"><span class="bar"></span><code>print("*******************")
+print("*   METEOR  HUNT   *")
+print("*  press SPACE...  *")
+print("*******************")</code></pre>
+        <div class="out">*******************
+*   METEOR  HUNT   *
+*  press SPACE...  *
+*******************</div>
+      </div>
+      <p class="codecap">Из звёздочек, тире и решёток можно собрать рамку, логотип, полоску здоровья.</p>
+    </div>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="task">
+        <span class="tag">ПРАКТИКА · ГЛАВНАЯ</span>
+        <p>Собери экран-заставку своей игры: рамка из символов, название игры внутри рамки, снизу — меню из 3 пунктов и подпись автора.</p>
+        <p class="hintline">Используй <code>print</code>, <code>\n</code> и <code>print()</code>. Это пойдёт в твоё портфолио.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 22 · SECTION -->
+  <section class="slide dark section">
+    <div class="num">4</div>
+    <div class="body"><div class="eyebrow">Часть 4</div><h1>Комментарии</h1></div>
+  </section>
+
+  <!-- 23 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Знак <code>#</code> — заметка для себя</h2>
+      <pre class="code"><span class="bar"></span><code># экран-заставка игры Meteor Hunt
+print("METEOR HUNT")
+
+print("1 - Play")     # пункт меню</code></pre>
+      <p class="codecap">Всё, что после <code>#</code> в строке, Python <b>не выполняет</b>. Это текст для людей.</p>
+    </div>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide light">
+    <div class="body">
+      <h2>Зачем нужны комментарии</h2>
+      <ul class="list">
+        <li>Подписать, что делает кусок кода — чтобы не забыть</li>
+        <li>Временно «выключить» строку, не удаляя её</li>
+        <li>Оставить заметку «доделать потом»</li>
+      </ul>
+      <pre class="code sm"><span class="bar"></span><code># print("отладка: сюда дошли")   строка выключена
+print("Игра запущена")</code></pre>
+    </div>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="task">
+        <span class="tag">ПРАКТИКА</span>
+        <p>Вернись к своей заставке. В самом верху добавь комментарий с названием игры и своим именем. Подпиши комментарием, где рамка, а где меню.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 26 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Итог урока</div>
+      <h2>Что ты теперь знаешь</h2>
+      <ul class="list check">
+        <li><code>print("текст")</code> — вывод на экран</li>
+        <li>Кавычки и скобки — парные, закрывай тем же, чем открыл</li>
+        <li><code>\n</code> — перенос строки, <code>print()</code> — пустая строка</li>
+        <li>Ошибка показывает тип и номер строки — читай её, не пугайся</li>
+        <li><code>#</code> — комментарий для себя</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 27 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Домашнее задание</div>
+      <h2>Экран Game Over</h2>
+      <p class="lead">Нарисуй символами экран проигрыша для своей игры: рамка, крупная надпись <code>GAME OVER</code>, строка «Твой счёт: 0», пункт «Нажми R — заново».</p>
+      <p class="muted">Добавь комментарии. Сохрани файл <code>homework1.py</code> и принеси на следующий урок.</p>
+    </div>
+  </section>
+
+  <!-- 28 -->
+  <section class="slide light">
+    <div class="body">
+      <div class="eyebrow">Что дальше</div>
+      <h2>Урок 2. Переменные — память игры</h2>
+      <p class="lead">Научимся хранить данные: счёт, жизни, имя героя. Сделаем «генератор персонажа», который считает характеристики.</p>
+    </div>
+  </section>
+
+  <!-- 29 -->
+  <section class="slide dark section">
+    <div class="body"><div class="eyebrow">Урок 1 завершён</div><h1>Отличная работа!</h1><p class="lead" style="margin-top:18px">Ты написал первую программу. Дальше — интереснее.</p></div>
+  </section>
+
+</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = [...document.querySelectorAll('.slide')];
+  const pbar = document.getElementById('pbar');
+  const curEl = document.getElementById('cur');
+  document.getElementById('total').textContent = slides.length;
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const hl = raw => esc(raw)
+    .replace(/(&lt;!--[\s\S]*?--&gt;)/g,'c$1/')
+    .replace(/(?<!&)(#[^\n]*)/g,'c$1/')
+    .replace(/(&quot;[^&\n]*?&quot;|&#39;[^&\n]*?&#39;)/g,'s$1/')
+    .replace(/c/g,'<span class="c">')
+    .replace(/s/g,'<span class="s">')
+    .replace(/\//g,'</span>');
+  document.querySelectorAll('pre.code code').forEach(c => { c.innerHTML = hl(c.textContent); });
+
+  document.querySelectorAll('.slide.dark').forEach(s => {
+    s.insertAdjacentHTML('afterbegin','<i class="comet c1"></i><i class="comet c2"></i><i class="comet c3"></i>');
+  });
+  slides.forEach(s => {
+    s.insertAdjacentHTML('afterbegin','<div class="logo"><span class="b">&gt;[</span><span class="a">rts</span><span class="b">&gt;</span></div>');
+  });
+
+  let idx = 0;
+  function show(n, push){
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s,i) => s.classList.toggle('is-active', i === idx));
+    deck.classList.toggle('on-light', slides[idx].classList.contains('light'));
+    pbar.style.width = ((idx + 1) / slides.length * 100) + '%';
+    curEl.textContent = idx + 1;
+    if (push !== false) history.replaceState(null, '', '#' + (idx + 1));
+  }
+  const next = () => show(idx + 1);
+  const prev = () => show(idx - 1);
+
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+
+  deck.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    const r = deck.getBoundingClientRect();
+    (e.clientX < r.left + r.width / 2 ? prev : next)();
+  });
+
+  let tx = 0;
+  addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive:true});
+  addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+  }, {passive:true});
+
+  addEventListener('hashchange', () => {
+    const n = parseInt(location.hash.slice(1), 10);
+    if (n && n - 1 !== idx) show(n - 1, false);
+  });
+
+  function fit(){
+    const s = Math.min(innerWidth / 1280, innerHeight / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  addEventListener('resize', fit);
+  fit();
+
+  const start = parseInt(location.hash.slice(1), 10);
+  show(start ? start - 1 : 0, false);
+</script>
